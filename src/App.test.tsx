@@ -4,9 +4,16 @@ import { expect } from 'chai';
 import App from './App';
 
 describe('<App>', () => {
-  it('renders learn react link', () => {
+  it('renders Main page', () => {
     const { getByText } = render(<App />);
-    const linkElement = getByText(/learn react/i);
+    const linkElement = getByText(/Main page/i);
     expect(document.body.contains(linkElement));
+  });
+  it('renders Nav Bar', () => {
+    const { getByText } = render(<App />);
+    const homeNavBarElement = getByText(/Home/i);
+    const photosNavbarElement = getByText(/Photos/i);
+    
+    expect(document.body.contains(homeNavBarElement && photosNavbarElement));
   });
 });
