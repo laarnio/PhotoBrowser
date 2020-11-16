@@ -8,7 +8,6 @@ import PhotoPage from './components/PhotoPage';
 import PhotosPage from './components/PhotosPage';
 import Layout from './components/Layout';
 
-
 interface AppProps {}
 
 function App({}: AppProps) {

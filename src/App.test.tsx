@@ -13,7 +13,7 @@ describe('<App>', () => {
     const { getByText } = render(<App />);
     const homeNavBarElement = getByText(/Home/i);
     const photosNavbarElement = getByText(/Photos/i);
-    
+
     expect(document.body.contains(homeNavBarElement && photosNavbarElement));
   });
 });
