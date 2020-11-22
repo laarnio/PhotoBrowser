@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Nav = styled.nav`
-  position: fixed;
+  position: sticky;
+  top: 0;
   width: 100%;
   z-index: 999;
 
