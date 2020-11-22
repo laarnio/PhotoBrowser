@@ -9,6 +9,7 @@ const ThumbNailContainer = styled.div`
     border-radius: 4px;
     padding: 5px;
     width: ${(props: ThumbNailContainerProps) => props.width}px;
+    height: ${(props: ThumbNailContainerProps) => props.height}px;
   }
 
   img:hover {
@@ -21,12 +22,22 @@ interface ThumbNailContainerProps {
   height: number;
 }
 
-const PhotoThumbnail = (props: { photoInfo: PhotoInfo }) => {
+const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
+  photoInfo,
+  height = 150,
+  width = 150
+}) => {
   return (
-    <ThumbNailContainer height={150} width={150}>
-      <img src={props.photoInfo.thumbnailUrl} alt={props.photoInfo.title}></img>
+    <ThumbNailContainer height={height} width={width}>
+      <img src={photoInfo.thumbnailUrl} alt={photoInfo.title}></img>
     </ThumbNailContainer>
   );
 };
+
+interface PhotoThumbnailProps {
+  photoInfo: PhotoInfo;
+  height?: number;
+  width?: number;
+}
 
 export default PhotoThumbnail;
