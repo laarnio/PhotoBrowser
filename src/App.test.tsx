@@ -7,13 +7,11 @@ describe('<App>', () => {
   it('renders Main page', () => {
     const { getByText } = render(<App />);
     const linkElement = getByText(/Main page/i);
-    expect(document.body.contains(linkElement));
+
   });
   it('renders Nav Bar', () => {
     const { getByText } = render(<App />);
     const homeNavBarElement = getByText(/Home/i);
     const photosNavbarElement = getByText(/Photos/i);
-    
-    expect(document.body.contains(homeNavBarElement && photosNavbarElement));
   });
 });
