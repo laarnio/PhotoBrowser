@@ -25,6 +25,7 @@ const SliderValue = styled.var`
   font-size: 13px;
   display: inline-block;
 `;
+const Setting = styled.div``;
 
 const PhotoBrowserSettingsComponent = () => {
   const [settingsVisible, setSettingsVisible] = useState(false);
@@ -71,45 +72,61 @@ const PhotoBrowserSettingsComponent = () => {
       <button onClick={() => setSettingsVisible(!settingsVisible)}>
         Settings
       </button>
+
       <PhotoBrowserSettingsContainer hidden={!settingsVisible}>
-        <SettingLabelText>Items per page:</SettingLabelText>
-        <Select
-          defaultOption={defaultOption}
-          onChange={(thumbnailsPerPage: number) =>
-            handleSelectChange(thumbnailsPerPage)
-          }
-          options={thumbnailsPerPageOptions}
-        />
-        <SettingLabelText>
-          Thumbnail size:{' '}
-          <SliderValue>{photoBrowserSettings.thumbnailSize}</SliderValue>
-        </SettingLabelText>
-        <Slider
-          axis="x"
-          xstep={10}
-          xmin={50}
-          xmax={300}
-          x={photoBrowserSettings.thumbnailSize}
-          onChange={({ x }) => photoBrowserFunctions.setThumbnailSize(x)}
-        />
-        <SettingLabelText>Sticky pagination footer:</SettingLabelText>
-        <input
-          type="checkbox"
-          checked={photoBrowserSettings.isPaginationSticky}
-          onChange={() => photoBrowserFunctions.togglePaginationSticky()}
-        />
-        <SettingLabelText>
-          Pagination neighbours visible:{' '}
-          <SliderValue>{photoBrowserSettings.paginationNeighbours}</SliderValue>
-        </SettingLabelText>
-        <Slider
-          axis="x"
-          xstep={1}
-          xmin={0}
-          xmax={4}
-          x={photoBrowserSettings.paginationNeighbours}
-          onChange={({ x }) => photoBrowserFunctions.setPaginationNeighbours(x)}
-        />
+        <Setting>
+          <SettingLabelText>Items per page:</SettingLabelText>
+          <Select
+            defaultOption={defaultOption}
+            onChange={(thumbnailsPerPage: number) =>
+              handleSelectChange(thumbnailsPerPage)
+            }
+            options={thumbnailsPerPageOptions}
+          />
+        </Setting>
+
+        <Setting>
+          <SettingLabelText>
+            Thumbnail size:{' '}
+            <SliderValue>{photoBrowserSettings.thumbnailSize}</SliderValue>
+          </SettingLabelText>
+          <Slider
+            axis="x"
+            xstep={10}
+            xmin={50}
+            xmax={300}
+            x={photoBrowserSettings.thumbnailSize}
+            onChange={({ x }) => photoBrowserFunctions.setThumbnailSize(x)}
+          />
+        </Setting>
+
+        <Setting>
+          <SettingLabelText>Sticky pagination footer:</SettingLabelText>
+          <input
+            type="checkbox"
+            checked={photoBrowserSettings.isPaginationSticky}
+            onChange={() => photoBrowserFunctions.togglePaginationSticky()}
+          />
+        </Setting>
+
+        <Setting>
+          <SettingLabelText>
+            Pagination neighbours visible:{' '}
+            <SliderValue>
+              {photoBrowserSettings.paginationNeighbours}
+            </SliderValue>
+          </SettingLabelText>
+          <Slider
+            axis="x"
+            xstep={1}
+            xmin={0}
+            xmax={4}
+            x={photoBrowserSettings.paginationNeighbours}
+            onChange={({ x }) =>
+              photoBrowserFunctions.setPaginationNeighbours(x)
+            }
+          />
+        </Setting>
       </PhotoBrowserSettingsContainer>
     </ContentContainer>
   );
