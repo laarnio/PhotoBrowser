@@ -1,11 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const StyledSelect = styled.select`
+  width: 100%;
+  text-align: center;
+`;
 const Select: React.FC<SelectProps> = ({
   options,
   onChange,
   defaultOption
 }) => {
   return (
-    <select
+    <StyledSelect
       defaultValue={defaultOption?.value}
       onChange={(e) => onChange(e.currentTarget.value)}
     >
@@ -14,7 +20,7 @@ const Select: React.FC<SelectProps> = ({
           {option.label}
         </option>
       ))}
-    </select>
+    </StyledSelect>
   );
 };
 
