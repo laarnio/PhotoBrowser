@@ -4,6 +4,7 @@ import PhotoThumbnail from './PhotoThumbnail';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import PaginationComponent from './common/PaginationComponent';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
+import styled from 'styled-components';
 
 export interface PhotoInfo {
   albumId: number;
@@ -16,6 +17,12 @@ export interface PhotoInfo {
 interface Response {
   data: PhotoInfo[];
 }
+
+const PhotoBrowserHeaderContainer = styled.div`
+  display: inline-block;
+  width: 100%;
+  height: 100px;
+`;
 
 const PhotosPage = () => {
   const photoBrowserSettings = useStore(
@@ -50,9 +57,11 @@ const PhotosPage = () => {
 
   return (
     <div>
-      <h3>Photos: </h3>
-      <p>Total photo count: {totalPhotoCount}</p>
-      <PhotoBrowserSettingsComponent />
+      <PhotoBrowserHeaderContainer>
+          <h3>Photos</h3>
+          Total photo count: {totalPhotoCount}
+          <PhotoBrowserSettingsComponent />
+      </PhotoBrowserHeaderContainer>
 
       <PhotoThumbnails
         height={photoBrowserSettings.thumbnailSize}
