@@ -5,13 +5,12 @@ const Select: React.FC<SelectProps> = ({
   defaultOption
 }) => {
   return (
-    <select onChange={(e) => onChange(e.currentTarget.value)}>
+    <select
+      defaultValue={defaultOption?.value}
+      onChange={(e) => onChange(e.currentTarget.value)}
+    >
       {options.map((option: SelectOption) => (
-        <option
-          selected={option === defaultOption}
-          key={option.value}
-          value={option.value}
-        >
+        <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}
