@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const Nav = styled.nav`
   position: fixed;
   width: 100%;
+  z-index: 999;
 
   ul {
     list-style-type: none;
