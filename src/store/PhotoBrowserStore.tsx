@@ -9,6 +9,8 @@ interface PhotoBrowserSettings {
   limit: number;
   lastPage: number;
   thumbnailSize: number;
+  isPaginationSticky: boolean;
+  paginationNeighbours: number;
 }
 
 interface PhotoBrowserFunctions {
@@ -18,6 +20,8 @@ interface PhotoBrowserFunctions {
   setLimit: Function;
   setLastPage: Function;
   setThumbnailSize: Function;
+  togglePaginationSticky: Function;
+  setPaginationNeighbours: Function;
 }
 
 export const useStore = create<State>((set) => ({
@@ -25,7 +29,9 @@ export const useStore = create<State>((set) => ({
     currentPage: 1,
     limit: 50,
     lastPage: 1,
-    thumbnailSize: 150
+    thumbnailSize: 150,
+    isPaginationSticky: true,
+    paginationNeighbours: 2
   },
   photoBrowserFunctions: {
     nextPage: () => set((state: State) => setNextPage(state)),
@@ -35,7 +41,11 @@ export const useStore = create<State>((set) => ({
     setLastPage: (lastPage: number) =>
       set((state: State) => setLastPage(state, lastPage)),
     setThumbnailSize: (newSize: number) =>
-      set((state: State) => setThumbnailSize(state, newSize))
+      set((state: State) => setThumbnailSize(state, newSize)),
+    togglePaginationSticky: () =>
+      set((state: State) => togglePaginationSticky(state)),
+    setPaginationNeighbours: (newNeighbourAmount: number) =>
+      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount))
   }
 }));
 
@@ -108,6 +118,29 @@ const setThumbnailSize = (state: State, newSize: number) => {
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
       thumbnailSize: newSize
+    }
+  };
+  return newState;
+};
+
+const togglePaginationSticky = (state: State) => {
+  console.log(state.photoBrowserSettings.isPaginationSticky);
+  const newState = {
+    ...state,
+    photoBrowserSettings: {
+      ...state.photoBrowserSettings,
+      isPaginationSticky: !state.photoBrowserSettings.isPaginationSticky
+    }
+  };
+  return newState;
+};
+
+const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
+  const newState = {
+    ...state,
+    photoBrowserSettings: {
+      ...state.photoBrowserSettings,
+      paginationNeighbours: newNeighbourAmount
     }
   };
   return newState;

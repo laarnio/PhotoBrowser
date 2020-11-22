@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PhotoThumbnail from './PhotoThumbnail';
 import { useStore, State } from '../store/PhotoBrowserStore';
-import PaginationComponent from './common/PaginationComponent';
+import Pagination from './common/Pagination';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
 import styled from 'styled-components';
 
@@ -58,9 +58,9 @@ const PhotosPage = () => {
   return (
     <div>
       <PhotoBrowserHeaderContainer>
-          <h3>Photos</h3>
-          Total photo count: {totalPhotoCount}
-          <PhotoBrowserSettingsComponent />
+        <h3>Photos</h3>
+        Total photo count: {totalPhotoCount}
+        <PhotoBrowserSettingsComponent />
       </PhotoBrowserHeaderContainer>
 
       <PhotoThumbnails
@@ -68,12 +68,14 @@ const PhotosPage = () => {
         width={photoBrowserSettings.thumbnailSize}
         data={data}
       />
-
-      <PaginationComponent
+      <Pagination
         totalPages={photoBrowserSettings.lastPage}
         currentPage={photoBrowserSettings.currentPage}
         nextPage={photoBrowserFunctions.nextPage}
         previousPage={photoBrowserFunctions.previousPage}
+        setPage={photoBrowserFunctions.setPage}
+        makeItSticky={photoBrowserSettings.isPaginationSticky}
+        paginationNeighbours={photoBrowserSettings.paginationNeighbours}
       />
     </div>
   );

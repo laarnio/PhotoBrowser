@@ -20,7 +20,7 @@ const SettingLabelText = styled.p`
   font-size: 12px;
   color: #5e72e4;
 `;
-const SliderValue = styled(SettingLabelText)`
+const SliderValue = styled.var`
   color: black;
   font-size: 13px;
   display: inline-block;
@@ -91,6 +91,24 @@ const PhotoBrowserSettingsComponent = () => {
           xmax={300}
           x={photoBrowserSettings.thumbnailSize}
           onChange={({ x }) => photoBrowserFunctions.setThumbnailSize(x)}
+        />
+        <SettingLabelText>Sticky pagination footer:</SettingLabelText>
+        <input
+          type="checkbox"
+          checked={photoBrowserSettings.isPaginationSticky}
+          onChange={() => photoBrowserFunctions.togglePaginationSticky()}
+        />
+        <SettingLabelText>
+          Pagination neighbours visible:{' '}
+          <SliderValue>{photoBrowserSettings.paginationNeighbours}</SliderValue>
+        </SettingLabelText>
+        <Slider
+          axis="x"
+          xstep={1}
+          xmin={0}
+          xmax={4}
+          x={photoBrowserSettings.paginationNeighbours}
+          onChange={({ x }) => photoBrowserFunctions.setPaginationNeighbours(x)}
         />
       </PhotoBrowserSettingsContainer>
     </ContentContainer>
