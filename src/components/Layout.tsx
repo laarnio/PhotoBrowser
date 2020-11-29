@@ -9,7 +9,7 @@ const ContentContainer = styled.div`
 `;
 
 const MainContainer = styled.div`
-  padding: 64px 16px 16px 16px;
+  padding: 16px;
   background: #fff;
 `;
 

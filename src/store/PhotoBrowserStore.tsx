@@ -1,14 +1,18 @@
 import create from 'zustand';
+import type { PhotoInfo } from 'components/PhotosPage';
 
 export type State = {
   photoBrowserSettings: PhotoBrowserSettings;
   photoBrowserFunctions: PhotoBrowserFunctions;
+  allPhotoInfos: PhotoInfo[];
 };
 interface PhotoBrowserSettings {
   currentPage: number;
   limit: number;
   lastPage: number;
   thumbnailSize: number;
+  isPaginationSticky: boolean;
+  paginationNeighbours: number;
 }
 
 interface PhotoBrowserFunctions {
@@ -18,6 +22,9 @@ interface PhotoBrowserFunctions {
   setLimit: Function;
   setLastPage: Function;
   setThumbnailSize: Function;
+  togglePaginationSticky: Function;
+  setPaginationNeighbours: Function;
+  setAllPhotoInfos: Function;
 }
 
 export const useStore = create<State>((set) => ({
@@ -25,7 +32,9 @@ export const useStore = create<State>((set) => ({
     currentPage: 1,
     limit: 50,
     lastPage: 1,
-    thumbnailSize: 150
+    thumbnailSize: 150,
+    isPaginationSticky: true,
+    paginationNeighbours: 2
   },
   photoBrowserFunctions: {
     nextPage: () => set((state: State) => setNextPage(state)),
@@ -35,12 +44,19 @@ export const useStore = create<State>((set) => ({
     setLastPage: (lastPage: number) =>
       set((state: State) => setLastPage(state, lastPage)),
     setThumbnailSize: (newSize: number) =>
-      set((state: State) => setThumbnailSize(state, newSize))
-  }
+      set((state: State) => setThumbnailSize(state, newSize)),
+    togglePaginationSticky: () =>
+      set((state: State) => togglePaginationSticky(state)),
+    setPaginationNeighbours: (newNeighbourAmount: number) =>
+      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount)),
+    setAllPhotoInfos: (photoInfos: PhotoInfo[]) =>
+      set((state: State) => setPhotoInfos(state, photoInfos))
+  },
+  allPhotoInfos: []
 }));
 
 const setNextPage = (state: State) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -55,7 +71,7 @@ const setNextPage = (state: State) => {
 };
 
 const setPreviousPage = (state: State) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -69,7 +85,7 @@ const setPreviousPage = (state: State) => {
 };
 
 const setPage = (state: State, page: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -80,7 +96,7 @@ const setPage = (state: State, page: number) => {
 };
 
 const setLimit = (state: State, newLimit: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -92,7 +108,7 @@ const setLimit = (state: State, newLimit: number) => {
 };
 
 const setLastPage = (state: State, newLastPage: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -103,12 +119,42 @@ const setLastPage = (state: State, newLastPage: number) => {
 };
 
 const setThumbnailSize = (state: State, newSize: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
       thumbnailSize: newSize
     }
   };
+  return newState;
+};
+
+const togglePaginationSticky = (state: State) => {
+  const newState: State = {
+    ...state,
+    photoBrowserSettings: {
+      ...state.photoBrowserSettings,
+      isPaginationSticky: !state.photoBrowserSettings.isPaginationSticky
+    }
+  };
+  return newState;
+};
+
+const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
+  const newState: State = {
+    ...state,
+    photoBrowserSettings: {
+      ...state.photoBrowserSettings,
+      paginationNeighbours: newNeighbourAmount
+    }
+  };
+  return newState;
+};
+const setPhotoInfos = (state: State, photoInfos: PhotoInfo[]) => {
+  const newState: State = {
+    ...state,
+    allPhotoInfos: photoInfos
+  };
+
   return newState;
 };
