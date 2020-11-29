@@ -130,7 +130,6 @@ const setThumbnailSize = (state: State, newSize: number) => {
 };
 
 const togglePaginationSticky = (state: State) => {
-  console.log(state.photoBrowserSettings.isPaginationSticky);
   const newState: State = {
     ...state,
     photoBrowserSettings: {
