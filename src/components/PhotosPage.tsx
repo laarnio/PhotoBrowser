@@ -44,10 +44,14 @@ const PhotosPage = () => {
   }, []);
 
   useEffect(() => {
-    const photosURI = `http://jsonplaceholder.typicode.com/photos?_page=${photoBrowserSettings.currentPage}&_limit=${photoBrowserSettings.limit}}`;
-    axios.get(photosURI).then((res: Response) => {
-      setData(res.data);
-    });
+    apiService
+      .getCurrentPagePhotoInfos(
+        photoBrowserSettings.currentPage,
+        photoBrowserSettings.limit
+      )
+      .then((currentPagePhotoInfos) => {
+        setData(currentPagePhotoInfos);
+      });
   }, [photoBrowserSettings.currentPage, photoBrowserSettings.limit]);
 
   useEffect(() => {
