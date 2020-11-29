@@ -38,7 +38,6 @@ const PhotosPage = () => {
 
   useEffect(() => {
     apiService.getAllPhotos().then((photoInfos) => {
-      console.log(photoInfos);
       photoBrowserFunctions.setAllPhotoInfos(photoInfos);
       setTotalPhotoCount(photoInfos.length);
     });

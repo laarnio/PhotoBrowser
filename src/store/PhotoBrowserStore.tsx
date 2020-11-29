@@ -1,8 +1,10 @@
 import create from 'zustand';
+import type { PhotoInfo } from 'components/PhotosPage';
 
 export type State = {
   photoBrowserSettings: PhotoBrowserSettings;
   photoBrowserFunctions: PhotoBrowserFunctions;
+  allPhotoInfos: PhotoInfo[];
 };
 interface PhotoBrowserSettings {
   currentPage: number;
@@ -22,6 +24,7 @@ interface PhotoBrowserFunctions {
   setThumbnailSize: Function;
   togglePaginationSticky: Function;
   setPaginationNeighbours: Function;
+  setAllPhotoInfos: Function;
 }
 
 export const useStore = create<State>((set) => ({
@@ -45,12 +48,15 @@ export const useStore = create<State>((set) => ({
     togglePaginationSticky: () =>
       set((state: State) => togglePaginationSticky(state)),
     setPaginationNeighbours: (newNeighbourAmount: number) =>
-      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount))
-  }
+      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount)),
+    setAllPhotoInfos: (photoInfos: PhotoInfo[]) =>
+      set((state: State) => setPhotoInfos(state, photoInfos))
+  },
+  allPhotoInfos: []
 }));
 
 const setNextPage = (state: State) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -65,7 +71,7 @@ const setNextPage = (state: State) => {
 };
 
 const setPreviousPage = (state: State) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -79,7 +85,7 @@ const setPreviousPage = (state: State) => {
 };
 
 const setPage = (state: State, page: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -90,7 +96,7 @@ const setPage = (state: State, page: number) => {
 };
 
 const setLimit = (state: State, newLimit: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -102,7 +108,7 @@ const setLimit = (state: State, newLimit: number) => {
 };
 
 const setLastPage = (state: State, newLastPage: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -113,7 +119,7 @@ const setLastPage = (state: State, newLastPage: number) => {
 };
 
 const setThumbnailSize = (state: State, newSize: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -125,7 +131,7 @@ const setThumbnailSize = (state: State, newSize: number) => {
 
 const togglePaginationSticky = (state: State) => {
   console.log(state.photoBrowserSettings.isPaginationSticky);
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
@@ -136,12 +142,20 @@ const togglePaginationSticky = (state: State) => {
 };
 
 const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
-  const newState = {
+  const newState: State = {
     ...state,
     photoBrowserSettings: {
       ...state.photoBrowserSettings,
       paginationNeighbours: newNeighbourAmount
     }
   };
+  return newState;
+};
+const setPhotoInfos = (state: State, photoInfos: PhotoInfo[]) => {
+  const newState: State = {
+    ...state,
+    allPhotoInfos: photoInfos
+  };
+
   return newState;
 };
