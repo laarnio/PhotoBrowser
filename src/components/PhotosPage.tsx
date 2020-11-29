@@ -5,6 +5,7 @@ import { useStore, State } from '../store/PhotoBrowserStore';
 import Pagination from './common/Pagination';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
 import styled from 'styled-components';
+import { apiService } from '../api/api';
 
 export interface PhotoInfo {
   albumId: number;
@@ -36,9 +37,10 @@ const PhotosPage = () => {
   const [data, setData] = useState<PhotoInfo[]>([]);
 
   useEffect(() => {
-    const allPhotosURI = `http://jsonplaceholder.typicode.com/photos`;
-    axios.get(allPhotosURI).then((res: Response) => {
-      setTotalPhotoCount(res.data.length);
+    apiService.getAllPhotos().then((photoInfos) => {
+      console.log(photoInfos);
+      photoBrowserFunctions.setAllPhotoInfos(photoInfos);
+      setTotalPhotoCount(photoInfos.length);
     });
   }, []);
 
