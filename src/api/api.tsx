@@ -7,12 +7,12 @@ export const apiService = {
 };
 
 const getAllPhotos = (): Promise<PhotoInfo[]> => {
-  const allPhotosURI = `http://jsonplaceholder.typicode.com/photos`;
+  const allPhotosURI = `https://jsonplaceholder.typicode.com/photos`;
   return get(allPhotosURI).then((res) => res.data);
 };
 
 const getPhotoInfoById = (id: number): Promise<PhotoInfo> => {
-  const photoByIdUri = `http://jsonplaceholder.typicode.com/photos/${id}`;
+  const photoByIdUri = `https://jsonplaceholder.typicode.com/photos/${id}`;
   return get(photoByIdUri).then((res) => res.data);
 };
 
