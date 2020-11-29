@@ -7,7 +7,6 @@ describe('<App>', () => {
   it('renders Main page', () => {
     const { getByText } = render(<App />);
     const linkElement = getByText(/Main page/i);
-
   });
   it('renders Nav Bar', () => {
     const { getByText } = render(<App />);

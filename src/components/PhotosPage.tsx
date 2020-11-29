@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PhotoThumbnail from './PhotoThumbnail';
 import { useStore, State } from '../store/PhotoBrowserStore';
-import PaginationComponent from './common/PaginationComponent';
+import Pagination from './common/Pagination';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
+import styled from 'styled-components';
+import { apiService } from '../api/api';
 
 export interface PhotoInfo {
   albumId: number;
@@ -17,6 +19,12 @@ interface Response {
   data: PhotoInfo[];
 }
 
+const PhotoBrowserHeaderContainer = styled.div`
+  display: inline-block;
+  width: 100%;
+  height: 100px;
+`;
+
 const PhotosPage = () => {
   const photoBrowserSettings = useStore(
     (state: State) => state.photoBrowserSettings
@@ -29,9 +37,9 @@ const PhotosPage = () => {
   const [data, setData] = useState<PhotoInfo[]>([]);
 
   useEffect(() => {
-    const allPhotosURI = `http://jsonplaceholder.typicode.com/photos`;
-    axios.get(allPhotosURI).then((res: Response) => {
-      setTotalPhotoCount(res.data.length);
+    apiService.getAllPhotos().then((photoInfos) => {
+      photoBrowserFunctions.setAllPhotoInfos(photoInfos);
+      setTotalPhotoCount(photoInfos.length);
     });
   }, []);
 
@@ -50,21 +58,25 @@ const PhotosPage = () => {
 
   return (
     <div>
-      <h3>Photos: </h3>
-      <p>Total photo count: {totalPhotoCount}</p>
-      <PhotoBrowserSettingsComponent />
+      <PhotoBrowserHeaderContainer>
+        <h3>Photos</h3>
+        Total photo count: {totalPhotoCount}
+        <PhotoBrowserSettingsComponent />
+      </PhotoBrowserHeaderContainer>
 
       <PhotoThumbnails
         height={photoBrowserSettings.thumbnailSize}
         width={photoBrowserSettings.thumbnailSize}
         data={data}
       />
-
-      <PaginationComponent
+      <Pagination
         totalPages={photoBrowserSettings.lastPage}
         currentPage={photoBrowserSettings.currentPage}
         nextPage={photoBrowserFunctions.nextPage}
         previousPage={photoBrowserFunctions.previousPage}
+        setPage={photoBrowserFunctions.setPage}
+        makeItSticky={photoBrowserSettings.isPaginationSticky}
+        paginationNeighbours={photoBrowserSettings.paginationNeighbours}
       />
     </div>
   );

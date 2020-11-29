@@ -1,37 +1,54 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Pagination = styled.div`
+const PaginationContainer = styled.div`
+  background: #fff;
   display: inline-block;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+  border-radius: 5px;
+  ${(props: { makeItSticky: boolean }) =>
+    props.makeItSticky ? 'position: sticky;' : ''}
+`;
 
-  a {
-    color: black;
+const PaginationButton = styled.button`
+  min-width: 56px;
+  padding: 8px 16px;
+  border: none;
+  text-decoration: none;
+  background: none;
 
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-
-  a.active {
+  .active {
     background-color: #4caf50;
     color: white;
     border-radius: 5px;
   }
 
-  a:hover:not(.active) {
+  :hover:not(.active) {
     background-color: #ddd;
     border-radius: 5px;
   }
+  :disabled {
+    visibility: hidden;
+  }
+  :focus {
+    outline: none;
+  }
 `;
+
 const DEFAULT_AMOUNT_OF_NEIGHBOURS = 2;
 
-const PaginationComponent: React.FC<PaginationComponentProps> = ({
+const Pagination: React.FC<PaginationComponentProps> = ({
   currentPage,
   totalPages,
   nextPage,
   previousPage,
-  amountOfNeighbours = DEFAULT_AMOUNT_OF_NEIGHBOURS
+  setPage,
+  paginationNeighbours = DEFAULT_AMOUNT_OF_NEIGHBOURS,
+  makeItSticky = false
 }) => {
-  const AMOUNT_OF_NEIGHBOURS = amountOfNeighbours;
+  const AMOUNT_OF_NEIGHBOURS = paginationNeighbours;
   const PAGE_NUMBERS_VISIBLE = 2 * AMOUNT_OF_NEIGHBOURS + 1;
 
   let amountAfterCurrent = AMOUNT_OF_NEIGHBOURS;
@@ -57,25 +74,37 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
   const displayedPageNumbers = pageNumbers.slice(startIndex, endIndex);
 
   return (
-    <Pagination>
-      <button disabled={currentPage == 1} onClick={() => previousPage()}>
+    <PaginationContainer makeItSticky={makeItSticky}>
+      <PaginationButton
+        disabled={currentPage === 1}
+        onClick={() => previousPage()}
+      >
         Prev page
-      </button>
+      </PaginationButton>
       {displayedPageNumbers.map((pageNumber) => (
-        <a key={pageNumber} href="#">
+        <PaginationButton key={pageNumber} onClick={() => setPage(pageNumber)}>
           {pageNumber == currentPage ? <b>{pageNumber}</b> : pageNumber}
-        </a>
+        </PaginationButton>
       ))}
-      <button onClick={() => nextPage()}> Next page</button>
-    </Pagination>
+      <PaginationButton
+        disabled={currentPage === totalPages}
+        onClick={() => nextPage()}
+      >
+        {' '}
+        Next page
+      </PaginationButton>
+    </PaginationContainer>
   );
 };
+
 interface PaginationComponentProps {
   currentPage: number;
   totalPages: number;
   nextPage: Function;
   previousPage: Function;
-  amountOfNeighbours?: number;
+  setPage: Function;
+  paginationNeighbours?: number;
+  makeItSticky?: boolean;
 }
 
-export default PaginationComponent;
+export default Pagination;
