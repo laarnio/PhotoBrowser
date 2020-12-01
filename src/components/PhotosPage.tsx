@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import PhotoThumbnail from './PhotoThumbnail';
+import PhotoThumbnails from './PhotoThumbnails';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import Pagination from './common/Pagination';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
@@ -14,9 +13,6 @@ export interface PhotoInfo {
   url: string;
   hers: number;
   thumbnailUrl: string;
-}
-interface Response {
-  data: PhotoInfo[];
 }
 
 const PhotoBrowserHeaderContainer = styled.div`
@@ -32,9 +28,11 @@ const PhotosPage = () => {
   const photoBrowserFunctions = useStore(
     (state: State) => state.photoBrowserFunctions
   );
+  const photoBrowserData = useStore((state: State) => state.photoBrowserData);
 
-  const [totalPhotoCount, setTotalPhotoCount] = useState(1);
-  const [data, setData] = useState<PhotoInfo[]>([]);
+  const [totalPhotoCount, setTotalPhotoCount] = useState(
+    photoBrowserData.allPhotoInfos.length
+  );
 
   useEffect(() => {
     apiService.getAllPhotos().then((photoInfos) => {
@@ -50,7 +48,7 @@ const PhotosPage = () => {
         photoBrowserSettings.limit
       )
       .then((currentPagePhotoInfos) => {
-        setData(currentPagePhotoInfos);
+        photoBrowserFunctions.setCurrentPagePhotoInfos(currentPagePhotoInfos);
       });
   }, [photoBrowserSettings.currentPage, photoBrowserSettings.limit]);
 
@@ -71,7 +69,7 @@ const PhotosPage = () => {
       <PhotoThumbnails
         height={photoBrowserSettings.thumbnailSize}
         width={photoBrowserSettings.thumbnailSize}
-        data={data}
+        data={photoBrowserData.currentPagePhotoInfos}
       />
       <Pagination
         totalPages={photoBrowserSettings.lastPage}
@@ -86,24 +84,3 @@ const PhotosPage = () => {
   );
 };
 export default PhotosPage;
-
-const PhotoThumbnails: React.FC<{
-  data: PhotoInfo[];
-  height: number;
-  width: number;
-}> = ({ data, height, width }) => {
-  if (!data) return <p> Loading </p>;
-
-  return (
-    <div>
-      {data.map((photoInfo: PhotoInfo) => (
-        <PhotoThumbnail
-          width={width}
-          height={height}
-          key={photoInfo.id}
-          photoInfo={photoInfo}
-        />
-      ))}
-    </div>
-  );
-};

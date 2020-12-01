@@ -4,7 +4,7 @@ import type { PhotoInfo } from 'components/PhotosPage';
 export type State = {
   photoBrowserSettings: PhotoBrowserSettings;
   photoBrowserFunctions: PhotoBrowserFunctions;
-  allPhotoInfos: PhotoInfo[];
+  photoBrowserData: PhotoBrowserData;
 };
 interface PhotoBrowserSettings {
   currentPage: number;
@@ -25,6 +25,12 @@ interface PhotoBrowserFunctions {
   togglePaginationSticky: Function;
   setPaginationNeighbours: Function;
   setAllPhotoInfos: Function;
+  setCurrentPagePhotoInfos: Function;
+}
+
+interface PhotoBrowserData {
+  allPhotoInfos: PhotoInfo[];
+  currentPagePhotoInfos: PhotoInfo[];
 }
 
 export const useStore = create<State>((set) => ({
@@ -36,6 +42,7 @@ export const useStore = create<State>((set) => ({
     isPaginationSticky: true,
     paginationNeighbours: 2
   },
+
   photoBrowserFunctions: {
     nextPage: () => set((state: State) => setNextPage(state)),
     previousPage: () => set((state: State) => setPreviousPage(state)),
@@ -50,23 +57,29 @@ export const useStore = create<State>((set) => ({
     setPaginationNeighbours: (newNeighbourAmount: number) =>
       set((state: State) => setPaginationNeighbours(state, newNeighbourAmount)),
     setAllPhotoInfos: (photoInfos: PhotoInfo[]) =>
-      set((state: State) => setPhotoInfos(state, photoInfos))
+      set((state: State) => setPhotoInfos(state, photoInfos)),
+    setCurrentPagePhotoInfos: (photoInfos: PhotoInfo[]) =>
+      set((state: State) => setCurrentPagePhotoInfos(state, photoInfos))
   },
-  allPhotoInfos: []
+
+  photoBrowserData: {
+    allPhotoInfos: [],
+    currentPagePhotoInfos: []
+  }
 }));
 
 const setNextPage = (state: State) => {
-  const newState: State = {
-    ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      currentPage:
-        state.photoBrowserSettings.currentPage + 1 >
-        state.photoBrowserSettings.lastPage
-          ? state.photoBrowserSettings.lastPage
-          : state.photoBrowserSettings.currentPage + 1
-    }
-  };
+  const nextPage = state.photoBrowserSettings.currentPage + 1;
+  let newState = state;
+  if (nextPage <= state.photoBrowserSettings.lastPage) {
+    newState = {
+      ...state,
+      photoBrowserSettings: {
+        ...state.photoBrowserSettings,
+        currentPage: nextPage
+      }
+    };
+  }
   return newState;
 };
 
@@ -150,11 +163,25 @@ const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
   };
   return newState;
 };
+
 const setPhotoInfos = (state: State, photoInfos: PhotoInfo[]) => {
   const newState: State = {
     ...state,
-    allPhotoInfos: photoInfos
+    photoBrowserData: {
+      ...state.photoBrowserData,
+      allPhotoInfos: photoInfos
+    }
   };
+  return newState;
+};
 
+const setCurrentPagePhotoInfos = (state: State, photoInfos: PhotoInfo[]) => {
+  const newState: State = {
+    ...state,
+    photoBrowserData: {
+      ...state.photoBrowserData,
+      currentPagePhotoInfos: photoInfos
+    }
+  };
   return newState;
 };
