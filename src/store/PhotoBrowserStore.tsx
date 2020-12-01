@@ -1,5 +1,6 @@
 import create from 'zustand';
 import type { PhotoInfo } from 'components/PhotosPage';
+import PhotoBrowserSettingsComponent from 'components/PhotoBrowserSettingsComponent';
 
 export type State = {
   photoBrowserSettings: PhotoBrowserSettings;
@@ -69,14 +70,15 @@ export const useStore = create<State>((set) => ({
 }));
 
 const setNextPage = (state: State) => {
-  const nextPage = state.photoBrowserSettings.currentPage + 1;
   let newState = state;
-  if (nextPage <= state.photoBrowserSettings.lastPage) {
+  if (
+    state.photoBrowserSettings.currentPage < state.photoBrowserSettings.lastPage
+  ) {
     newState = {
       ...state,
       photoBrowserSettings: {
         ...state.photoBrowserSettings,
-        currentPage: nextPage
+        currentPage: state.photoBrowserSettings.currentPage + 1
       }
     };
   }
@@ -84,16 +86,16 @@ const setNextPage = (state: State) => {
 };
 
 const setPreviousPage = (state: State) => {
-  const newState: State = {
-    ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      currentPage:
-        state.photoBrowserSettings.currentPage - 1 < 1
-          ? 1
-          : state.photoBrowserSettings.currentPage - 1
-    }
-  };
+  let newState = state;
+  if (state.photoBrowserSettings.currentPage > 0) {
+    newState = {
+      ...state,
+      photoBrowserSettings: {
+        ...state.photoBrowserSettings,
+        currentPage: state.photoBrowserSettings.currentPage - 1
+      }
+    };
+  }
   return newState;
 };
 
