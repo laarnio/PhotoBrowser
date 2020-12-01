@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import type { PhotoInfo } from './PhotosPage';
+import { Link } from 'react-router-dom';
 
 const ThumbNailContainer = styled.div`
   display: inline-block;
@@ -27,9 +28,12 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
   height = 150,
   width = 150
 }) => {
+  const PHOTO_URL = `/photos/${photoInfo.id}`;
   return (
     <ThumbNailContainer height={height} width={width}>
-      <img src={photoInfo.thumbnailUrl} alt={photoInfo.title}></img>
+      <Link to={PHOTO_URL}>
+        <img src={photoInfo.thumbnailUrl} alt={photoInfo.title}></img>
+      </Link>
     </ThumbNailContainer>
   );
 };
