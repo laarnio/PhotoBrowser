@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { colors } from '../common/colors';
+import { colors } from '../../assets/other/colors';
 
 const PaginationContainer = styled.div`
   background: ${colors.brown.lightTwo};
@@ -64,7 +64,6 @@ const Pagination: React.FC<PaginationComponentProps> = ({
   const AMOUNT_OF_NEIGHBOURS = paginationNeighbours;
   const PAGE_NUMBERS_VISIBLE = 2 * AMOUNT_OF_NEIGHBOURS + 1;
 
-
   let amountAfterCurrent = AMOUNT_OF_NEIGHBOURS;
   let startIndex = currentPage - AMOUNT_OF_NEIGHBOURS - 1;
   let endIndex = currentPage + AMOUNT_OF_NEIGHBOURS;
@@ -72,10 +71,9 @@ const Pagination: React.FC<PaginationComponentProps> = ({
   const NEAR_START = PAGE_NUMBERS_VISIBLE - currentPage > AMOUNT_OF_NEIGHBOURS;
   const NEAR_END = currentPage + amountAfterCurrent > totalPages;
 
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const pageNumbers = Array.from(Array(totalPages).keys()).map(
+    (node) => node + 1
+  );
 
   if (NEAR_START) {
     startIndex = 0;
@@ -100,10 +98,7 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       </PaginationButton>
       {displayedPageNumbers.map((pageNumber) =>
         pageNumber !== currentPage ? (
-          <PaginationButton
-            key={pageNumber}
-            onClick={() => setPage(pageNumber)}
-          >
+          <PaginationButton key={pageNumber} onClick={() => nextPage()}>
             {pageNumber}
           </PaginationButton>
         ) : (

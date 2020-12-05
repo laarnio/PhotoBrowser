@@ -8,20 +8,20 @@ const PhotoThumbnailsContainer = styled.div`
 `;
 
 const PhotoThumbnails: React.FC<{
-  data: PhotoInfo[];
+  photos: PhotoInfo[];
   height: number;
   width: number;
-}> = ({ data, height, width }) => {
-  if (!data) return <p> Loading </p>;
+}> = ({ photos, height, width }) => {
+  if (!photos) return <p> Loading </p>;
 
   return (
     <PhotoThumbnailsContainer>
-      {data.map((photoInfo: PhotoInfo) => (
+      {photos.map((photo: PhotoInfo) => (
         <PhotoThumbnail
           width={width}
           height={height}
-          key={photoInfo.id}
-          photoInfo={photoInfo}
+          key={photo.id}
+          photoInfo={photo}
         />
       ))}
     </PhotoThumbnailsContainer>

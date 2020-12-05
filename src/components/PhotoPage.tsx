@@ -10,7 +10,7 @@ interface ParamTypes {
 }
 
 const Photo = styled.img`
-  display: ${(props:{hidden: boolean}) => props.hidden ? 'none': 'block'}
+  display: ${(props: { hidden: boolean }) => (props.hidden ? 'none' : 'block')}
   width: 600px;
   height: 600px;
   grid-column: 2 / 4;
@@ -44,63 +44,37 @@ const MainContainer = styled.div`
   margin: 5px;
 `;
 
-const PhotoLink = styled.a`
-  @media (max-width: 430px) {
-    display: none;
-  }
-`;
-const ShortenPhotoLink = styled.a`
-  display: none;
-  @media (max-width: 430px) {
-    display: inline-block;
-  }
-`;
-
 const PhotoPage = () => {
   let { id } = useParams<ParamTypes>();
-  const photoInfoFromStore = useStore((state: State) =>
-    state.photoBrowserData.allPhotoInfos.find(
-      (photoInfo) => photoInfo.id === parseInt(id)
-    )
-  );
-
-  const [photoInfo, setPhotoInfo] = useState<PhotoInfo | null | undefined>(
-    photoInfoFromStore
-  );
-
+  const store = useStore((state: State) => state);
   const [isReady, setIsReady] = useState(false);
+  //const [photo, setPhoto] = useState<PhotoInfo | null>(null);
 
   useEffect(() => {
-    if (!photoInfo) {
-      apiService.getPhotoInfoById(parseInt(id)).then((res) => {
-        setPhotoInfo(res);
-      });
+    if (store.photos.length === 0) {
+      store.getAllPhotos();
     }
   }, []);
 
-
-  const shortenedUrl = photoInfo?.url
-    .slice(0, photoInfo.url.length - 10)
-    .concat('...');
-
+  let photo = store.photos.find((photo) => photo.id === parseInt(id));
   return (
     <PhotoPageContainer>
       <PhotoPageHeader>
-        <h1>{photoInfo?.title}</h1>
+        <h1>{photo?.title}</h1>
       </PhotoPageHeader>
       <LeftContainer>
-        <p>Album ID: {photoInfo?.albumId}</p>
+        <p>Album ID: {photo?.albumId}</p>
         <p>
-          Link:
-          <PhotoLink href={photoInfo?.url}>{photoInfo?.url}</PhotoLink>
-          <ShortenPhotoLink href={photoInfo?.url}>
-            {shortenedUrl}
-          </ShortenPhotoLink>
+          Link: <a href={photo?.url}>{photo?.url}</a>
         </p>
       </LeftContainer>
       <MainContainer>
-        <Photo src={photoInfo?.thumbnailUrl} hidden={isReady} />
-        <Photo src={photoInfo?.url} hidden={!isReady} onLoad={() => setIsReady(true)}/>
+        <Photo src={photo?.thumbnailUrl} hidden={isReady} />
+        <Photo
+          src={photo?.url}
+          hidden={!isReady}
+          onLoad={() => setIsReady(true)}
+        />
       </MainContainer>
     </PhotoPageContainer>
   );

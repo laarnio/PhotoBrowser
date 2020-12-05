@@ -10,6 +10,11 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   defaultOption
 }) => {
+  options = options.sort(
+    (a: SelectOption, b: SelectOption) => a.value - b.value
+  );
+  console.log(options, 'optionis');
+  console.log(defaultOption);
   return (
     <StyledSelect
       defaultValue={defaultOption?.value}
@@ -32,7 +37,7 @@ interface SelectProps {
   defaultOption?: SelectOption;
 }
 
-export interface SelectOption {
+export type SelectOption = {
   value: any;
   label: string;
-}
+};

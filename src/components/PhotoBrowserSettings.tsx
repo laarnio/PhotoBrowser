@@ -3,7 +3,7 @@ import Select, { SelectOption } from './common/Select';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import Slider from 'react-input-slider';
 import styled from 'styled-components';
-import { colors } from './common/colors';
+import { colors } from '../assets/other/colors';
 import { FiSettings } from 'react-icons/fi';
 
 const ContentContainer = styled.div`
@@ -51,43 +51,16 @@ const Setting = styled.div``;
 
 const PhotoBrowserSettingsComponent = () => {
   const [settingsVisible, setSettingsVisible] = useState(false);
-  const photoBrowserSettings = useStore(
-    (state: State) => state.photoBrowserSettings
-  );
-  const photoBrowserFunctions = useStore(
-    (state: State) => state.photoBrowserFunctions
-  );
-
-  const thumbnailsPerPageOptions: SelectOption[] = [
-    {
-      value: 10,
-      label: '10'
-    },
-    {
-      value: 20,
-      label: '20'
-    },
-    {
-      value: 50,
-      label: '50'
-    },
-    {
-      value: 100,
-      label: '100'
-    },
-    {
-      value: 500,
-      label: '500'
-    }
-  ];
+  const store = useStore((state: State) => state);
 
   const handleSelectChange = (thumbnailsPerPage: number) => {
-    photoBrowserFunctions.setLimit(thumbnailsPerPage);
+    store.pagination.setLimit(thumbnailsPerPage);
   };
 
-  const defaultOption = thumbnailsPerPageOptions.find(
-    (option) => option.value == photoBrowserSettings.limit
+  const defaultOption = store.thumbnails.thumbnailsPerPageOptions.find(
+    (option) => option.value == store.pagination.limit
   );
+  console.log(defaultOption);
 
   return (
     <ContentContainer>
@@ -103,22 +76,22 @@ const PhotoBrowserSettingsComponent = () => {
             onChange={(thumbnailsPerPage: number) =>
               handleSelectChange(thumbnailsPerPage)
             }
-            options={thumbnailsPerPageOptions}
+            options={store.thumbnails.thumbnailsPerPageOptions}
           />
         </Setting>
 
         <Setting>
           <SettingLabelText>
             Thumbnail size:{' '}
-            <SliderValue>{photoBrowserSettings.thumbnailSize}</SliderValue>
+            <SliderValue>{store.thumbnails.thumbnailSize}</SliderValue>
           </SettingLabelText>
           <Slider
             axis="x"
             xstep={10}
             xmin={50}
             xmax={300}
-            x={photoBrowserSettings.thumbnailSize}
-            onChange={({ x }) => photoBrowserFunctions.setThumbnailSize(x)}
+            x={store.thumbnails.thumbnailSize}
+            onChange={({ x }) => store.thumbnails.setThumbnailSize(x)}
           />
         </Setting>
 
@@ -126,27 +99,23 @@ const PhotoBrowserSettingsComponent = () => {
           <SettingLabelText>Sticky pagination footer:</SettingLabelText>
           <input
             type="checkbox"
-            checked={photoBrowserSettings.isPaginationSticky}
-            onChange={() => photoBrowserFunctions.togglePaginationSticky()}
+            checked={store.pagination.isPaginationSticky}
+            onChange={() => store.pagination.togglePaginationSticky()}
           />
         </Setting>
 
         <Setting>
           <SettingLabelText>
             Pagination neighbours visible:{' '}
-            <SliderValue>
-              {photoBrowserSettings.paginationNeighbours}
-            </SliderValue>
+            <SliderValue>{store.pagination.paginationNeighbours}</SliderValue>
           </SettingLabelText>
           <Slider
             axis="x"
             xstep={1}
             xmin={0}
             xmax={4}
-            x={photoBrowserSettings.paginationNeighbours}
-            onChange={({ x }) =>
-              photoBrowserFunctions.setPaginationNeighbours(x)
-            }
+            x={store.pagination.paginationNeighbours}
+            onChange={({ x }) => store.pagination.setPaginationNeighbours(x)}
           />
         </Setting>
       </PhotoBrowserSettingsContainer>

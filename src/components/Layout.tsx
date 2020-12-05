@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import bannerImage from '../assets/images/Banner1.jpg';
 import footerImage from '../assets/images/Banner2.jpg';
 
-import { colors } from './common/colors';
+import { colors } from '../assets/other/colors';
 
 const Banner = styled.div`
   background-image: url(${bannerImage});

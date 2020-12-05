@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import type { PhotoInfo } from './PhotosPage';
 import { Link } from 'react-router-dom';
-import { colors } from './common/colors';
+import { colors } from '../assets/other/colors';
 
 const ThumbNailContainer = styled.div`
   display: inline-block;
