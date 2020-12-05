@@ -1,6 +1,11 @@
 import React from 'react';
 import type { PhotoInfo } from './PhotosPage';
 import PhotoThumbnail from './PhotoThumbnail';
+import styled from 'styled-components';
+
+const PhotoThumbnailsContainer = styled.div`
+  min-height: 200px;
+`;
 
 const PhotoThumbnails: React.FC<{
   data: PhotoInfo[];
@@ -8,9 +13,9 @@ const PhotoThumbnails: React.FC<{
   width: number;
 }> = ({ data, height, width }) => {
   if (!data) return <p> Loading </p>;
-  console.log(data);
+
   return (
-    <div>
+    <PhotoThumbnailsContainer>
       {data.map((photoInfo: PhotoInfo) => (
         <PhotoThumbnail
           width={width}
@@ -19,7 +24,7 @@ const PhotoThumbnails: React.FC<{
           photoInfo={photoInfo}
         />
       ))}
-    </div>
+    </PhotoThumbnailsContainer>
   );
 };
 

@@ -1,32 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { colors } from '../common/colors';
 
 const PaginationContainer = styled.div`
-  background: #fff;
-  display: inline-block;
-  width: 100%;
+  background: ${colors.brown.lightTwo};
   text-align: center;
   bottom: 0;
   border-radius: 5px;
-  ${(props: { makeItSticky: boolean }) =>
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(
+    ${(props: PaginationContainerProps) => props.buttonAmount},
+    1fr
+  );
+
+  ${(props: PaginationContainerProps) =>
     props.makeItSticky ? 'position: sticky;' : ''}
 `;
 
-const PaginationButton = styled.button`
-  min-width: 56px;
-  padding: 8px 16px;
-  border: none;
-  text-decoration: none;
-  background: none;
+interface PaginationContainerProps {
+  makeItSticky: boolean;
+  buttonAmount: number;
+}
 
-  .active {
-    background-color: #4caf50;
-    color: white;
-    border-radius: 5px;
-  }
+const PaginationButton = styled.button`
+  padding: 1em;
+  justify-content: space-between;
+  border: none;
+  border-radius: 5px;
+  color: ${colors.brown.secondaryOne};
+  font-weight: 700;
+  background: ${colors.brown.lightTwo};
 
   :hover:not(.active) {
-    background-color: #ddd;
+    background-color: ${colors.brown.secondaryOne};
+    color: ${colors.brown.lightOne};
     border-radius: 5px;
   }
   :disabled {
@@ -35,6 +43,11 @@ const PaginationButton = styled.button`
   :focus {
     outline: none;
   }
+`;
+
+const CurrentPage = styled.div`
+  padding: 1em;
+  font-weight: bold;
 `;
 
 const DEFAULT_AMOUNT_OF_NEIGHBOURS = 2;
@@ -50,6 +63,7 @@ const Pagination: React.FC<PaginationComponentProps> = ({
 }) => {
   const AMOUNT_OF_NEIGHBOURS = paginationNeighbours;
   const PAGE_NUMBERS_VISIBLE = 2 * AMOUNT_OF_NEIGHBOURS + 1;
+
 
   let amountAfterCurrent = AMOUNT_OF_NEIGHBOURS;
   let startIndex = currentPage - AMOUNT_OF_NEIGHBOURS - 1;
@@ -74,24 +88,33 @@ const Pagination: React.FC<PaginationComponentProps> = ({
   const displayedPageNumbers = pageNumbers.slice(startIndex, endIndex);
 
   return (
-    <PaginationContainer makeItSticky={makeItSticky}>
+    <PaginationContainer
+      makeItSticky={makeItSticky}
+      buttonAmount={PAGE_NUMBERS_VISIBLE + 2}
+    >
       <PaginationButton
         disabled={currentPage === 1}
         onClick={() => previousPage()}
       >
-        Prev page
+        Prev
       </PaginationButton>
-      {displayedPageNumbers.map((pageNumber) => (
-        <PaginationButton key={pageNumber} onClick={() => setPage(pageNumber)}>
-          {pageNumber == currentPage ? <b>{pageNumber}</b> : pageNumber}
-        </PaginationButton>
-      ))}
+      {displayedPageNumbers.map((pageNumber) =>
+        pageNumber !== currentPage ? (
+          <PaginationButton
+            key={pageNumber}
+            onClick={() => setPage(pageNumber)}
+          >
+            {pageNumber}
+          </PaginationButton>
+        ) : (
+          <CurrentPage key={pageNumber}>{currentPage}</CurrentPage>
+        )
+      )}
       <PaginationButton
         disabled={currentPage === totalPages}
         onClick={() => nextPage()}
       >
-        {' '}
-        Next page
+        Next
       </PaginationButton>
     </PaginationContainer>
   );

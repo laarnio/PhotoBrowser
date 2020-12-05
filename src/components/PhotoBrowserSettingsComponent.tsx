@@ -3,22 +3,44 @@ import Select, { SelectOption } from './common/Select';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import Slider from 'react-input-slider';
 import styled from 'styled-components';
+import { colors } from './common/colors';
+import { FiSettings } from 'react-icons/fi';
 
 const ContentContainer = styled.div`
-  min-width: 280px;
-  float: right;
+  grid-column: 12/12;
+  place-items: center;
+`;
+
+const SettingsButton = styled.button`
+  padding: 6px 5px 4px 6px;
+  background-color: ${colors.brown.secondaryTwo};
+  color: ${colors.brown.secondaryOne};
+  border: none;
+  border-radius: 5px;
+  font-weight: 700;
+
+  :hover {
+    background-color: ${colors.brown.secondaryOne};
+    color: ${colors.brown.secondaryTwo};
+  }
 `;
 
 const PhotoBrowserSettingsContainer = styled.div`
-  position: relative;
-  background-color: #eaeaea;
+  position: absolute;
+  transition: all 0.05s linear;
+
+  ${(props: { visible: boolean }) =>
+    props.visible ? 'transform: scaleY(1) ' : 'transform: scaleY(0);'};
+  overflow: hidden;
+  right: 64px;
+  background-color: ${colors.brown.secondaryTwo};
   padding: 16px;
   box-shadow: 0 0 10px #000000;
+  color: ${colors.brown.secondaryOne};
 `;
 const SettingLabelText = styled.p`
   margin: 0;
   font-size: 12px;
-  color: #5e72e4;
 `;
 const SliderValue = styled.var`
   color: black;
@@ -69,11 +91,11 @@ const PhotoBrowserSettingsComponent = () => {
 
   return (
     <ContentContainer>
-      <button onClick={() => setSettingsVisible(!settingsVisible)}>
-        Settings
-      </button>
+      <SettingsButton onClick={() => setSettingsVisible(!settingsVisible)}>
+        <FiSettings size={20} />
+      </SettingsButton>
 
-      <PhotoBrowserSettingsContainer hidden={!settingsVisible}>
+      <PhotoBrowserSettingsContainer visible={settingsVisible}>
         <Setting>
           <SettingLabelText>Items per page:</SettingLabelText>
           <Select

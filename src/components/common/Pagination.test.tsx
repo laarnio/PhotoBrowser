@@ -39,7 +39,7 @@ describe('<Pagination> First Test Set', () => {
     const eight = getByText(/8/i);
 
     expect(six.tagName === 'BUTTON').to.be.true;
-    expect(seven.tagName === 'B').to.be.true;
+    expect(seven.tagName === 'DIV').to.be.true;
     expect(eight.tagName === 'BUTTON').to.be.true;
   });
   it('Should not render tenth page', () => {
@@ -84,7 +84,7 @@ describe('<Pagination> Second test set', () => {
     const { getByText } = SecondTest();
     const one = getByText(/1/i);
 
-    expect(one.tagName === 'B').to.be.true;
+    expect(one.tagName === 'DIV').to.be.true;
   });
 
   it('PrevButton should be disabled and next button enabled', () => {
@@ -128,7 +128,7 @@ describe('<Pagination> Third test set, three paginationNeighbours', () => {
     const ten = getByText(/10/i);
     const four = getByText(/4/i);
 
-    expect(ten.tagName === 'B').to.be.true;
+    expect(ten.tagName === 'DIV').to.be.true;
     expect(four.tagName === 'BUTTON').to.be.true;
   });
 

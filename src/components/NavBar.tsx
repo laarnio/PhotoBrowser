@@ -13,12 +13,12 @@ const Nav = styled.nav`
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #728da5;
+    text-align: center;
   }
 
   li {
-    float: left;
-    border-right: 1px solid #bbb;
+    display: inline-block;
   }
 
   li:last-child {
@@ -27,18 +27,17 @@ const Nav = styled.nav`
 
   li a {
     display: block;
-    color: white;
+    color: #133453;
     text-align: center;
     padding: 14px 16px;
+    font-weight: 500;
     text-decoration: none;
   }
 
   li a:hover:not(.active) {
-    background-color: #111;
-  }
-
-  .active {
-    background-color: #4caf50;
+    background-color: #4a6b8a;
+    text-decoration: none;
+    border-radius: 5px;
   }
 `;
 

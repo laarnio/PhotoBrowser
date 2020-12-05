@@ -6,7 +6,7 @@ import PhotoBrowserSettingsComponent from './PhotoBrowserSettingsComponent';
 import styled from 'styled-components';
 import { apiService } from '../api/api';
 
-export interface PhotoInfo {
+export type PhotoInfo = {
   albumId: number;
   id: number;
   title: string;
@@ -16,9 +16,9 @@ export interface PhotoInfo {
 }
 
 const PhotoBrowserHeaderContainer = styled.div`
-  display: inline-block;
-  width: 100%;
-  height: 100px;
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(12, fr);
 `;
 
 const PhotosPage = () => {
@@ -59,11 +59,10 @@ const PhotosPage = () => {
   }, [photoBrowserSettings.limit, totalPhotoCount]);
 
   return (
-    <div>
+    <>
       <PhotoBrowserHeaderContainer>
-        <h3>Photos</h3>
-        Total photo count: {totalPhotoCount}
         <PhotoBrowserSettingsComponent />
+        <p>Total photo count: {totalPhotoCount}</p>
       </PhotoBrowserHeaderContainer>
 
       <PhotoThumbnails
@@ -71,6 +70,7 @@ const PhotosPage = () => {
         width={photoBrowserSettings.thumbnailSize}
         data={photoBrowserData.currentPagePhotoInfos}
       />
+      
       <Pagination
         totalPages={photoBrowserSettings.lastPage}
         currentPage={photoBrowserSettings.currentPage}
@@ -80,7 +80,8 @@ const PhotosPage = () => {
         makeItSticky={photoBrowserSettings.isPaginationSticky}
         paginationNeighbours={photoBrowserSettings.paginationNeighbours}
       />
-    </div>
+    </>
   );
 };
+
 export default PhotosPage;

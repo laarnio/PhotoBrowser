@@ -1,12 +1,12 @@
 import create from 'zustand';
 import type { PhotoInfo } from 'components/PhotosPage';
-import PhotoBrowserSettingsComponent from 'components/PhotoBrowserSettingsComponent';
 
 export type State = {
   photoBrowserSettings: PhotoBrowserSettings;
   photoBrowserFunctions: PhotoBrowserFunctions;
   photoBrowserData: PhotoBrowserData;
 };
+
 interface PhotoBrowserSettings {
   currentPage: number;
   limit: number;

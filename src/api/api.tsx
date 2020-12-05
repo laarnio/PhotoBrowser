@@ -22,9 +22,10 @@ const getCurrentPagePhotoInfos = (
   currentPage: number,
   limit: number
 ): Promise<PhotoInfo[]> => {
-  const currentPagePhotosURI = `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}}`;
+  const currentPagePhotosURI = `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`;
   return get(currentPagePhotosURI).then((res) => res.data);
 };
+
 const get = (url: string) => {
   return axios.get(url);
 };
