@@ -1,59 +1,80 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Nav = styled.nav`
+  letter-spacing: 6px;
+  font-family: Fjalla one;
+  font-weight: 900;
+
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 999;
+  text-align: center;
 
   ul {
-    list-style-type: none;
     margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
+    background-color: ${(props) => props.theme.teal.five};
   }
 
   li {
-    float: left;
-    border-right: 1px solid #bbb;
+    display: inline-block;
+  }
+  p {
+    margin: 0;
   }
 
-  li:last-child {
-    border-right: none;
-  }
-
-  li a {
+  li a,
+  li p {
     display: block;
-    color: white;
-    text-align: center;
+    color: ${(props) => props.theme.teal.one};
     padding: 14px 16px;
     text-decoration: none;
   }
 
   li a:hover:not(.active) {
-    background-color: #111;
+    text-decoration: none;
   }
-
-  .active {
-    background-color: #4caf50;
+  a::after,
+  p::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: ${(props) => props.theme.teal.three};
+    transition: width 0.3s;
+  }
+  a:hover::after {
+    width: 100%;
+  }
+  p::after {
+    width: 100%;
   }
 `;
 
 const NavBar = () => {
+  const location = useLocation();
+
   return (
     <Nav>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          {location.pathname === '/' ? <p>HOME</p> : <Link to="/">HOME</Link>}
         </li>
         <li>
-          <Link to="/about">About</Link>
+          {location.pathname === '/about' ? (
+            <p>ABOUT</p>
+          ) : (
+            <Link to="/about">ABOUT</Link>
+          )}
         </li>
         <li>
-          <Link to="/photos">Photos</Link>
+          {location.pathname === '/photos' ? (
+            <p>PHOTOS</p>
+          ) : (
+            <Link to="/photos">PHOTOS</Link>
+          )}
         </li>
       </ul>
     </Nav>

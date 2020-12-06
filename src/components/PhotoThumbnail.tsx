@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { PhotoInfo } from './PhotosPage';
+import { Link } from 'react-router-dom';
 
 const ThumbNailContainer = styled.div`
-  display: inline-block;
+  flex: 0 1 ${(props: ThumbNailContainerProps) => props.width}px;
   img {
-    border: 1px solid #ddd;
+    border: 1px solid ${(props) => props.theme.secondary};
     border-radius: 4px;
     padding: 5px;
+
     width: ${(props: ThumbNailContainerProps) => props.width}px;
     height: ${(props: ThumbNailContainerProps) => props.height}px;
   }
@@ -27,9 +29,12 @@ const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
   height = 150,
   width = 150
 }) => {
+  const PHOTO_URL = `/photos/${photoInfo.id}`;
   return (
     <ThumbNailContainer height={height} width={width}>
-      <img src={photoInfo.thumbnailUrl} alt={photoInfo.title}></img>
+      <Link to={PHOTO_URL}>
+        <img src={photoInfo.thumbnailUrl} alt={photoInfo.title}></img>
+      </Link>
     </ThumbNailContainer>
   );
 };
