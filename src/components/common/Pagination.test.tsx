@@ -140,7 +140,7 @@ describe('<Pagination> Third test set, three paginationNeighbours', () => {
     expect(nextButton.hasAttribute('disabled')).to.be.true;
   });
 });
-
+// ------------------------- FOURTH TEST SET -------------------------------
 describe('<Pagination> Fourth test set, two paginationNeighbours only 3 pages', () => {
   const FourthTest = () =>
     render(

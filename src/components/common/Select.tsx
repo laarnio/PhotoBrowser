@@ -11,10 +11,11 @@ const StyledSelect = styled.select`
   .select:hover {
     background-color: black;
   }
+  font-weight: 900;
 `;
 
 const LabelText = styled.label`
-  color: ${(props) => props.theme.darkOne};
+  color: ${(props) => props.theme.teal.six};
   font-size: smaller;
 `;
 

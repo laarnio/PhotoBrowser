@@ -25,7 +25,7 @@ const PhotoBrowserSettingsContainer = styled.div`
   z-index: 999;
   ${(props: { visible: boolean }) => (props.visible ? '' : 'display: none')};
   right: 0px;
-  background-color: ${(props) => props.theme.lightOne};
+  background-color: ${(props) => props.theme.teal.one};
   padding: 16px;
   box-shadow: 0 0 10px #000000;
   color: ${(props) => props.theme.secondary};
