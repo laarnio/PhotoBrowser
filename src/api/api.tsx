@@ -8,6 +8,7 @@ export const apiService = {
   getCurrentPagePhotoInfos: (currentPage: number, limit: number) =>
     getCurrentPagePhotoInfos(currentPage, limit),
   getAllAlbums: () => getAllAlbums()
+
 };
 
 const getAllPhotos = (): Promise<PhotoInfo[]> => {
@@ -24,6 +25,7 @@ const getCurrentPagePhotoInfos = (
   currentPage: number,
   limit: number
 ): Promise<PhotoInfo[]> => {
+
   const currentPagePhotosURI = `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`;
   return get(currentPagePhotosURI).then((res) => res.data);
 };

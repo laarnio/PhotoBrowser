@@ -57,12 +57,14 @@ const PhotosPage = () => {
     handleQueryParams();
   }, []);
   useEffect(() => {
+
     let param = queryParams.get('page');
     const page = param ? parseInt(param, 10) : null;
     if (page && store.pagination.currentPage !== page) {
       store.pagination.setPage(page);
     }
   }, [queryParams.get('page')]);
+
 
   const handleQueryParams = () => {
     let param = queryParams.get('limit');
