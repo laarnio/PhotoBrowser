@@ -28,14 +28,13 @@ const Container = styled.main`
   box-shadow: 0 0 10px;
   display: flex;
   flex-flow: column;
-  h1, p {
-    color: ${props => props.theme.teal.eight};
+  h1,
+  p {
+    color: ${(props) => props.theme.teal.eight};
   }
 `;
 
-const Wrapper = styled.div`
-  
-`;
+const Wrapper = styled.div``;
 
 export const theme: ITheme = {
   primary: colors.takeOne.primary,
@@ -43,7 +42,7 @@ export const theme: ITheme = {
   lightOne: colors.takeOne.lightBackground,
   lightTwo: colors.green.two,
   darkOne: '#467b7c',
-  teal: {...colors.teal}
+  teal: { ...colors.teal }
 };
 
 interface ITheme {

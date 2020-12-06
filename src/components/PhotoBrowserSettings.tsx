@@ -6,13 +6,13 @@ import styled from 'styled-components';
 import { FiSettings } from 'react-icons/fi';
 
 const SettingsButton = styled.button`
-  border: none;  
+  border: none;
   padding: 3px 4px 1px 4px;
   background-color: ${(props) => props.theme.teal.one};
   color: ${(props) => props.theme.teal.five};
-  
+
   border-radius: 5px;
-  grid-column:12/12;
+  grid-column: 12/12;
 
   :hover {
     background-color: ${(props) => props.theme.teal.three};
@@ -23,8 +23,7 @@ const SettingsButton = styled.button`
 const PhotoBrowserSettingsContainer = styled.div`
   position: absolute;
   z-index: 999;
-  ${(props: { visible: boolean }) =>
-    props.visible ? '' : 'display: none'};
+  ${(props: { visible: boolean }) => (props.visible ? '' : 'display: none')};
   right: 0px;
   background-color: ${(props) => props.theme.lightOne};
   padding: 16px;

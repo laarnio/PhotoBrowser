@@ -4,7 +4,7 @@ import { expect } from 'chai';
 
 import Pagination from './Pagination';
 import { ThemeProvider } from 'styled-components';
-import {theme} from '../Layout';
+import { theme } from '../Layout';
 
 // ------------------------- FIRST TEST SET -------------------------------
 describe('<Pagination> First Test Set', () => {
@@ -19,7 +19,6 @@ describe('<Pagination> First Test Set', () => {
           setPage={() => placeHolder()}
         />
       </ThemeProvider>
-      
     );
   it('Renders Pagination pages with default paginationNeighbours', () => {
     const { getByText } = FirstTest();
@@ -109,7 +108,6 @@ describe('<Pagination> Third test set, three paginationNeighbours', () => {
           paginationNeighbours={3}
         />
       </ThemeProvider>
-      
     );
 
   it('10 & 4 should be visible, but not 3', () => {
@@ -146,7 +144,7 @@ describe('<Pagination> Third test set, three paginationNeighbours', () => {
 describe('<Pagination> Fourth test set, two paginationNeighbours only 3 pages', () => {
   const FourthTest = () =>
     render(
-      <ThemeProvider theme={theme}>  
+      <ThemeProvider theme={theme}>
         <Pagination
           currentPage={3}
           totalPages={3}

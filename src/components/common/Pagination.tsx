@@ -46,7 +46,7 @@ const PaginationButton = styled.button`
 
 const CurrentPage = styled.div`
   padding: 1em;
-  color: ${props => props.theme.teal.ten};
+  color: ${(props) => props.theme.teal.ten};
   font-weight: bold;
 `;
 
@@ -86,11 +86,10 @@ const Pagination: React.FC<PaginationComponentProps> = ({
     }
   }
   const displayedPageNumbers = pageNumbers.slice(startIndex, endIndex);
-  let buttonAmount = PAGE_NUMBERS_VISIBLE + 2
-  if(totalPages === 1) {
+  let buttonAmount = PAGE_NUMBERS_VISIBLE + 2;
+  if (totalPages === 1) {
     buttonAmount = 3;
-  }
-  else if (PAGE_NUMBERS_VISIBLE > totalPages){
+  } else if (PAGE_NUMBERS_VISIBLE > totalPages) {
     buttonAmount = PAGE_NUMBERS_VISIBLE;
   }
   return (

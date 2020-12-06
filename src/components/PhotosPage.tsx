@@ -17,6 +17,7 @@ export type PhotoInfo = {
 
 const PhotoThumbnailContainer = styled.div`
   flex: 1 1 auto;
+  margin-top: 1em;
 `;
 
 const Grid = styled.div`
@@ -29,16 +30,16 @@ const SelectContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-grid-column: 10/14;
-position: relative;
+  grid-column: 10/14;
+  position: relative;
 `;
 const PhotoCount = styled.p`
-font-size:small;
-margin: 0;
-position: absolute;
-bottom: 0;
-color: ${props => props.theme.teal.six};
-`
+  font-size: small;
+  margin: 0;
+  position: absolute;
+  bottom: 0;
+  color: ${(props) => props.theme.teal.six};
+`;
 const SettingsContainer = styled.div`
   grid-column: 13/13;
   position: relative;
@@ -56,15 +57,14 @@ const PhotosPage = () => {
   }, []);
   useEffect(() => {
     let param = queryParams.get('page');
-    const page = param ? parseInt(param, 10): null;
-    if(page && store.pagination.currentPage !== page) {
+    const page = param ? parseInt(param, 10) : null;
+    if (page && store.pagination.currentPage !== page) {
       store.pagination.setPage(page);
     }
-  },[queryParams.get('page')])
+  }, [queryParams.get('page')]);
 
   const handleQueryParams = () => {
-    
-    let param  = queryParams.get('limit');
+    let param = queryParams.get('limit');
     const limit = param ? parseInt(param, 10) : null;
     const thumbnailSize = queryParams.get('thumbnailSize');
     const paginationNeighbours = queryParams.get('paginationNeighbours');
@@ -114,34 +114,35 @@ const PhotosPage = () => {
   };
 
   const handleNextPage = () => {
-    history.push('/photos?page='+(store.pagination.currentPage + 1))
+    history.push('/photos?page=' + (store.pagination.currentPage + 1));
     store.pagination.setNextPage();
-  }
+  };
 
   const handlePrevPage = () => {
-    history.push('/photos?page='+(store.pagination.currentPage - 1));
+    history.push('/photos?page=' + (store.pagination.currentPage - 1));
     store.pagination.setPreviousPage();
-  }
+  };
 
   const handleSetPage = (page: number) => {
     history.push('/photos?page=' + page);
     store.pagination.setPage(page);
-    
-  }
+  };
   let defaultOption = allOption;
-  if(store.filters.albumId) {
-    let selectedAlbum = store.albums.find(album => album.id === store.filters.albumId)
+  if (store.filters.albumId) {
+    let selectedAlbum = store.albums.find(
+      (album) => album.id === store.filters.albumId
+    );
     defaultOption = {
       value: selectedAlbum?.id,
       label: selectedAlbum ? selectedAlbum.title : 'Error'
-    }
+    };
   }
   return (
     <>
       <Grid>
-          <SettingsContainer>
-            <PhotoBrowserSettings />
-          </SettingsContainer>
+        <SettingsContainer>
+          <PhotoBrowserSettings />
+        </SettingsContainer>
         {!store.isLoadingAlbums && (
           <SelectContainer>
             <Select
@@ -175,7 +176,6 @@ const PhotosPage = () => {
         makeItSticky={store.pagination.isPaginationSticky}
         paginationNeighbours={store.pagination.paginationNeighbours}
       />
-      
     </>
   );
 };

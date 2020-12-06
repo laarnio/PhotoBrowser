@@ -25,7 +25,8 @@ const Nav = styled.nav`
     margin: 0;
   }
 
-  li a, li p{
+  li a,
+  li p {
     display: block;
     color: ${(props) => props.theme.teal.one};
     padding: 14px 16px;
@@ -35,16 +36,17 @@ const Nav = styled.nav`
   li a:hover:not(.active) {
     text-decoration: none;
   }
-  a::after, p::after {
+  a::after,
+  p::after {
     content: '';
     display: block;
     width: 0;
     height: 2px;
-    background: ${props => props.theme.teal.three};
-    transition: width .3s;
+    background: ${(props) => props.theme.teal.three};
+    transition: width 0.3s;
   }
   a:hover::after {
-    width:100%;
+    width: 100%;
   }
   p::after {
     width: 100%;
@@ -58,22 +60,21 @@ const NavBar = () => {
     <Nav>
       <ul>
         <li>
-        {location.pathname === '/' 
-          ? <p>HOME</p> :
-          <Link to="/">HOME</Link>
-          }
+          {location.pathname === '/' ? <p>HOME</p> : <Link to="/">HOME</Link>}
         </li>
         <li>
-        {location.pathname === '/about' 
-          ? <p>ABOUT</p> :
-          <Link to="/about">ABOUT</Link>
-          }
+          {location.pathname === '/about' ? (
+            <p>ABOUT</p>
+          ) : (
+            <Link to="/about">ABOUT</Link>
+          )}
         </li>
         <li>
-          {location.pathname === '/photos' 
-          ? <p>PHOTOS</p> :
-          <Link to="/photos">PHOTOS</Link>
-          }
+          {location.pathname === '/photos' ? (
+            <p>PHOTOS</p>
+          ) : (
+            <Link to="/photos">PHOTOS</Link>
+          )}
         </li>
       </ul>
     </Nav>

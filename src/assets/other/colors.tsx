@@ -4,7 +4,7 @@ export const colors: IColors = {
     two: '#8C5906',
     three: '#CCAB76',
     four: '#FFFAF1',
-    five: '#efd1a1',
+    five: '#efd1a1'
   },
   green: {
     one: '#A8DB92',
@@ -28,7 +28,7 @@ export const colors: IColors = {
     seven: '#386263',
     eight: '#2a4a4a',
     nine: '#1c3132',
-    ten: '#0e1919',
+    ten: '#0e1919'
   }
 };
 

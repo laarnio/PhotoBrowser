@@ -6,7 +6,6 @@ const StyledSelect = styled.select`
   background-color: ${(props) => props.theme.lightOne};
   width: 100%;
   text-align: center;
-  margin-bottom: 1em;
   padding: 5px;
   border-radius: 5px;
   .select:hover {
@@ -15,7 +14,7 @@ const StyledSelect = styled.select`
 `;
 
 const LabelText = styled.label`
-  color: ${props => props.theme.darkOne};
+  color: ${(props) => props.theme.darkOne};
   font-size: smaller;
 `;
 
