@@ -38,6 +38,7 @@ const PhotoCount = styled.p`
   margin: 0;
   position: absolute;
   bottom: 0;
+  right: 0;
   color: ${(props) => props.theme.teal.six};
 `;
 const SettingsContainer = styled.div`
