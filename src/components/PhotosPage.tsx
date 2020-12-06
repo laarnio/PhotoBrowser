@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PhotoThumbnails from './PhotoThumbnails';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import Pagination from './common/Pagination';
-import PhotoBrowserSettingsComponent from './PhotoBrowserSettings';
+import PhotoBrowserSettings from './PhotoBrowserSettings';
 import styled from 'styled-components';
 import { useLocation, useHistory } from 'react-router-dom';
 import Select, { SelectOption } from './common/Select';
@@ -15,56 +15,62 @@ export type PhotoInfo = {
   thumbnailUrl: string;
 };
 
-const PhotoThumbnailContent = styled.div`
-  min-height: 50vh;
+const PhotoThumbnailContainer = styled.div`
+  flex: 1 1 auto;
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(12, fr);
+  grid-template-columns: repeat(12, 1fr);
 `;
 
 const SelectContainer = styled.div`
-  grid-column: 1/2;
+  grid-column: 1/4;
+`;
+
+const InfoContainer = styled.div`
+grid-column: 10/14;
+position: relative;
+`;
+const PhotoCount = styled.p`
+font-size:small;
+margin: 0;
+position: absolute;
+bottom: 0;
+color: ${props => props.theme.teal.six};
+`
+const SettingsContainer = styled.div`
+  grid-column: 13/13;
+  position: relative;
 `;
 
 const PhotosPage = () => {
   const store = useStore((state: State) => state);
   const location = useLocation();
   const history = useHistory();
-
+  const queryParams = new URLSearchParams(location.search);
   useEffect(() => {
     store.getAllPhotos();
     store.getAllAlbums();
     handleQueryParams();
   }, []);
+  useEffect(() => {
+    let param = queryParams.get('page');
+    const page = param ? parseInt(param, 10): null;
+    if(page && store.pagination.currentPage !== page) {
+      store.pagination.setPage(page);
+    }
+  },[queryParams.get('page')])
 
   const handleQueryParams = () => {
-    const queryParams = new URLSearchParams(location.search);
-    let param = queryParams.get('page');
-    const page = param ? parseInt(param, 10) : null;
-    param = queryParams.get('limit');
+    
+    let param  = queryParams.get('limit');
     const limit = param ? parseInt(param, 10) : null;
     const thumbnailSize = queryParams.get('thumbnailSize');
     const paginationNeighbours = queryParams.get('paginationNeighbours');
 
-    if (page && store.pagination.currentPage !== page) {
-      store.pagination.setPage(page);
-      queryParams.delete('page');
-    }
     if (limit && store.pagination.limit !== limit) {
-      if (
-        !store.thumbnails.thumbnailsPerPageOptions.find(
-          (option) => option.value === limit
-        )
-      ) {
-        store.thumbnails.addThumbnailPerPageOption({
-          value: limit,
-          label: limit.toString()
-        });
-      }
       store.pagination.setLimit(limit);
-      queryParams.delete('limit');
     }
     if (
       thumbnailSize &&
@@ -83,9 +89,6 @@ const PhotosPage = () => {
       );
       queryParams.delete('paginationNeighbours');
     }
-    history.replace({
-      search: queryParams.toString()
-    });
   };
 
   const allOption: SelectOption = {
@@ -95,7 +98,7 @@ const PhotosPage = () => {
 
   let albumOptions = store.albums
     .map((album) => ({
-      label: album.id.toString(),
+      label: album.title.toString(),
       value: album.id
     }))
     .concat(allOption);
@@ -110,43 +113,69 @@ const PhotosPage = () => {
     return filteredPhotos;
   };
 
+  const handleNextPage = () => {
+    history.push('/photos?page='+(store.pagination.currentPage + 1))
+    store.pagination.setNextPage();
+  }
+
+  const handlePrevPage = () => {
+    history.push('/photos?page='+(store.pagination.currentPage - 1));
+    store.pagination.setPreviousPage();
+  }
+
+  const handleSetPage = (page: number) => {
+    history.push('/photos?page=' + page);
+    store.pagination.setPage(page);
+    
+  }
+  let defaultOption = allOption;
+  if(store.filters.albumId) {
+    let selectedAlbum = store.albums.find(album => album.id === store.filters.albumId)
+    defaultOption = {
+      value: selectedAlbum?.id,
+      label: selectedAlbum ? selectedAlbum.title : 'Error'
+    }
+  }
   return (
     <>
       <Grid>
-        {!store.isLoadingAlbums && !store.isLoadingPhotos && (
-          <PhotoBrowserSettingsComponent />
-        )}
-        <p>Total photo count: {store.photos.length}</p>
+          <SettingsContainer>
+            <PhotoBrowserSettings />
+          </SettingsContainer>
         {!store.isLoadingAlbums && (
           <SelectContainer>
-            Filter by album:
             <Select
               options={albumOptions}
-              defaultOption={allOption}
+              defaultOption={defaultOption}
+              label={'Filter by album:'}
               onChange={(albumId: string) =>
                 store.filters.setAlbumFilter(parseInt(albumId))
               }
             />
           </SelectContainer>
         )}
+        <InfoContainer>
+          <PhotoCount>Total photo count: {store.photos.length}</PhotoCount>
+        </InfoContainer>
       </Grid>
 
-      <PhotoThumbnailContent>
+      <PhotoThumbnailContainer>
         <PhotoThumbnails
           height={store.thumbnails.thumbnailSize}
           width={store.thumbnails.thumbnailSize}
         />
-      </PhotoThumbnailContent>
+      </PhotoThumbnailContainer>
 
       <Pagination
         totalPages={Math.ceil(filterPhotos().length / store.pagination.limit)}
         currentPage={store.pagination.currentPage || 1}
-        nextPage={store.pagination.setNextPage}
-        previousPage={store.pagination.setPreviousPage}
-        setPage={store.pagination.setPage}
+        nextPage={handleNextPage}
+        previousPage={handlePrevPage}
+        setPage={(page: number) => handleSetPage(page)}
         makeItSticky={store.pagination.isPaginationSticky}
         paginationNeighbours={store.pagination.paginationNeighbours}
       />
+      
     </>
   );
 };

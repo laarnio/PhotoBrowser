@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { PhotoInfo } from './PhotosPage';
 import PhotoThumbnail from './PhotoThumbnail';
 import styled from 'styled-components';

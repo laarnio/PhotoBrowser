@@ -2,13 +2,13 @@ import React, { FunctionComponent } from 'react';
 import NavBar from './NavBar';
 import styled, { ThemeProvider } from 'styled-components';
 
-import bannerImage from '../assets/images/Banner1.jpg';
-import footerImage from '../assets/images/Banner2.jpg';
+import heroImage from '../assets/images/Hero.jpg';
+import footerImage from '../assets/images/Footer.jpg';
 
-import { colors } from '../assets/other/colors';
+import { colors, IColor } from '../assets/other/colors';
 
 const Banner = styled.div`
-  background-image: url(${bannerImage});
+  background-image: url(${heroImage});
   background-size: cover;
   height: 180px;
   text-align: center;
@@ -17,27 +17,33 @@ const Banner = styled.div`
 const Footer = styled.footer`
   background-image: url(${footerImage});
   background-size: cover;
-
+  box-shadow: inset 0px 9px 13px 0px;
   height: 180px;
 `;
 
 const Container = styled.main`
   padding: 32px;
   min-height: 90vh;
-  background: ${(props) => props.theme.backgroundColorOne};
+  background: ${(props) => props.theme.teal.one};
   box-shadow: 0 0 10px;
+  display: flex;
+  flex-flow: column;
+  h1, p {
+    color: ${props => props.theme.teal.eight};
+  }
 `;
 
 const Wrapper = styled.div`
-  color: ${(props) => props.theme.primary};
-  min-height: 100vh;
+  
 `;
 
-const theme: ITheme = {
+export const theme: ITheme = {
   primary: colors.takeOne.primary,
   secondary: colors.takeOne.secondary,
   lightOne: colors.takeOne.lightBackground,
-  lightTwo: colors.green.two
+  lightTwo: colors.green.two,
+  darkOne: '#467b7c',
+  teal: {...colors.teal}
 };
 
 interface ITheme {
@@ -45,6 +51,8 @@ interface ITheme {
   secondary: string;
   lightOne: string;
   lightTwo: string;
+  darkOne: string;
+  teal: IColor;
 }
 
 const Layout: FunctionComponent = ({ children }) => {

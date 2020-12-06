@@ -3,18 +3,23 @@ import { render, screen } from '@testing-library/react';
 import { expect } from 'chai';
 
 import Pagination from './Pagination';
+import { ThemeProvider } from 'styled-components';
+import {theme} from '../Layout';
 
 // ------------------------- FIRST TEST SET -------------------------------
 describe('<Pagination> First Test Set', () => {
   const FirstTest = () =>
     render(
-      <Pagination
-        currentPage={7}
-        totalPages={10}
-        nextPage={() => placeHolder()}
-        previousPage={() => placeHolder()}
-        setPage={() => placeHolder()}
-      />
+      <ThemeProvider theme={theme}>
+        <Pagination
+          currentPage={7}
+          totalPages={10}
+          nextPage={() => placeHolder()}
+          previousPage={() => placeHolder()}
+          setPage={() => placeHolder()}
+        />
+      </ThemeProvider>
+      
     );
   it('Renders Pagination pages with default paginationNeighbours', () => {
     const { getByText } = FirstTest();
@@ -54,14 +59,16 @@ describe('<Pagination> First Test Set', () => {
 describe('<Pagination> Second test set', () => {
   const SecondTest = () =>
     render(
-      <Pagination
-        currentPage={1}
-        totalPages={10}
-        nextPage={() => placeHolder()}
-        previousPage={() => placeHolder()}
-        setPage={() => placeHolder()}
-        paginationNeighbours={0}
-      />
+      <ThemeProvider theme={theme}>
+        <Pagination
+          currentPage={1}
+          totalPages={10}
+          nextPage={() => placeHolder()}
+          previousPage={() => placeHolder()}
+          setPage={() => placeHolder()}
+          paginationNeighbours={0}
+        />
+      </ThemeProvider>
     );
 
   it('Renders Pagination pages with zero paginationNeighbours', () => {
@@ -92,14 +99,17 @@ describe('<Pagination> Second test set', () => {
 describe('<Pagination> Third test set, three paginationNeighbours', () => {
   const ThirdTest = () =>
     render(
-      <Pagination
-        currentPage={10}
-        totalPages={10}
-        nextPage={() => placeHolder()}
-        previousPage={() => placeHolder()}
-        setPage={() => placeHolder()}
-        paginationNeighbours={3}
-      />
+      <ThemeProvider theme={theme}>
+        <Pagination
+          currentPage={10}
+          totalPages={10}
+          nextPage={() => placeHolder()}
+          previousPage={() => placeHolder()}
+          setPage={() => placeHolder()}
+          paginationNeighbours={3}
+        />
+      </ThemeProvider>
+      
     );
 
   it('10 & 4 should be visible, but not 3', () => {
@@ -136,14 +146,16 @@ describe('<Pagination> Third test set, three paginationNeighbours', () => {
 describe('<Pagination> Fourth test set, two paginationNeighbours only 3 pages', () => {
   const FourthTest = () =>
     render(
-      <Pagination
-        currentPage={3}
-        totalPages={3}
-        nextPage={() => placeHolder()}
-        previousPage={() => placeHolder()}
-        setPage={() => placeHolder()}
-        paginationNeighbours={2}
-      />
+      <ThemeProvider theme={theme}>  
+        <Pagination
+          currentPage={3}
+          totalPages={3}
+          nextPage={() => placeHolder()}
+          previousPage={() => placeHolder()}
+          setPage={() => placeHolder()}
+          paginationNeighbours={2}
+        />
+      </ThemeProvider>
     );
 
   it('Prev, 1, 2, 3 should be visible', () => {

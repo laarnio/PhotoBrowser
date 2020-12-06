@@ -2,13 +2,22 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledSelect = styled.select`
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.teal.seven};
   background-color: ${(props) => props.theme.lightOne};
   width: 100%;
   text-align: center;
+  margin-bottom: 1em;
+  padding: 5px;
+  border-radius: 5px;
+  .select:hover {
+    background-color: black;
+  }
 `;
 
-const LabelText = styled.label``;
+const LabelText = styled.label`
+  color: ${props => props.theme.darkOne};
+  font-size: smaller;
+`;
 
 const Select: React.FC<SelectProps> = ({
   options,

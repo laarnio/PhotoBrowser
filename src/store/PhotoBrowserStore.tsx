@@ -1,8 +1,6 @@
 import create from 'zustand';
 import type { PhotoInfo } from 'components/PhotosPage';
 import { apiService } from '../../src/api/api';
-import type { SelectOption } from 'components/common/Select';
-import { useLocation, useHistory } from 'react-router-dom';
 
 export type Album = {
   id: number;
@@ -38,34 +36,9 @@ export type State = {
 
   thumbnails: {
     thumbnailSize: number;
-    thumbnailsPerPageOptions: SelectOption[];
-    addThumbnailPerPageOption: (newOptions: SelectOption) => void;
     setThumbnailSize: (size: number) => void;
   };
 };
-
-const thumbnailsPerPageOptions: SelectOption[] = [
-  {
-    value: 10,
-    label: '10'
-  },
-  {
-    value: 20,
-    label: '20'
-  },
-  {
-    value: 50,
-    label: '50'
-  },
-  {
-    value: 100,
-    label: '100'
-  },
-  {
-    value: 500,
-    label: '500'
-  }
-];
 
 export const useStore = create<State>((set) => ({
   photos: [],
@@ -122,9 +95,6 @@ export const useStore = create<State>((set) => ({
   },
   thumbnails: {
     thumbnailSize: 150,
-    thumbnailsPerPageOptions: thumbnailsPerPageOptions,
-    addThumbnailPerPageOption: (newOption: SelectOption) =>
-      set((state: State) => addThumbnailPerPageOption(state, newOption)),
     setThumbnailSize: (newSize: number) =>
       set((state: State) => setThumbnailSize(state, newSize))
   }
@@ -261,19 +231,6 @@ const setAlbumFilter = (state: State, albumId: number) => {
     pagination: {
       ...state.pagination,
       currentPage: 1
-    }
-  };
-  return newState;
-};
-
-const addThumbnailPerPageOption = (state: State, newOption: SelectOption) => {
-  const newState: State = {
-    ...state,
-    thumbnails: {
-      ...state.thumbnails,
-      thumbnailsPerPageOptions: state.thumbnails.thumbnailsPerPageOptions.concat(
-        newOption
-      )
     }
   };
   return newState;

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import type { PhotoInfo } from './PhotosPage';
 import { Link } from 'react-router-dom';
-import { colors } from '../assets/other/colors';
 
 const ThumbNailContainer = styled.div`
   flex: 0 1 ${(props: ThumbNailContainerProps) => props.width}px;

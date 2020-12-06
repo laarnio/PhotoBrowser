@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const PaginationContainer = styled.div`
-  background-color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.teal.five};
   text-align: center;
   bottom: 0;
   border-radius: 5px;
@@ -27,9 +27,9 @@ const PaginationButton = styled.button`
   justify-content: space-between;
   border: none;
   border-radius: 5px;
-  color: ${(props) => props.theme.lightOne};
+  color: ${(props) => props.theme.teal.one};
   font-weight: 700;
-  background: ${(props) => props.theme.primary};
+  background: ${(props) => props.theme.teal.five};
 
   :hover:not(.active) {
     background-color: ${(props) => props.theme.secondary};
@@ -46,6 +46,7 @@ const PaginationButton = styled.button`
 
 const CurrentPage = styled.div`
   padding: 1em;
+  color: ${props => props.theme.teal.ten};
   font-weight: bold;
 `;
 
@@ -61,7 +62,7 @@ const Pagination: React.FC<PaginationComponentProps> = ({
   makeItSticky = false
 }) => {
   const AMOUNT_OF_NEIGHBOURS = paginationNeighbours;
-  const PAGE_NUMBERS_VISIBLE = 2 * AMOUNT_OF_NEIGHBOURS + 1;
+  let PAGE_NUMBERS_VISIBLE = 2 * AMOUNT_OF_NEIGHBOURS + 1;
 
   let amountAfterCurrent = AMOUNT_OF_NEIGHBOURS;
   let startIndex = currentPage - AMOUNT_OF_NEIGHBOURS - 1;
@@ -84,13 +85,18 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       startIndex = 0;
     }
   }
-
   const displayedPageNumbers = pageNumbers.slice(startIndex, endIndex);
-
+  let buttonAmount = PAGE_NUMBERS_VISIBLE + 2
+  if(totalPages === 1) {
+    buttonAmount = 3;
+  }
+  else if (PAGE_NUMBERS_VISIBLE > totalPages){
+    buttonAmount = PAGE_NUMBERS_VISIBLE;
+  }
   return (
     <PaginationContainer
       makeItSticky={makeItSticky}
-      buttonAmount={PAGE_NUMBERS_VISIBLE + 2}
+      buttonAmount={buttonAmount}
     >
       <PaginationButton
         disabled={currentPage === 1}
