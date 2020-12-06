@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledSelect = styled.select`
+  color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.lightOne};
   width: 100%;
   text-align: center;
 `;

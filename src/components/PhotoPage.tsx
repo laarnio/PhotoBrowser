@@ -24,11 +24,7 @@ const Photo = styled.img`
   }
 `;
 
-const PhotoPageContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justiify-content: center;
-`;
+const PhotoPageContainer = styled.div``;
 const PhotoPageHeader = styled.div`
   padding: 2rem;
   width: 100%;
@@ -57,23 +53,18 @@ const PhotoPage = () => {
   let photo = store.photos.find((photo) => photo.id === parseInt(id));
   return (
     <PhotoPageContainer>
-      <PhotoPageHeader>
-        <h1>{photo?.title}</h1>
-      </PhotoPageHeader>
-      <LeftContainer>
-        <p>Album ID: {photo?.albumId}</p>
-        <p>
-          Link: <a href={photo?.url}>{photo?.url}</a>
-        </p>
-      </LeftContainer>
-      <MainContainer>
-        <Photo src={photo?.thumbnailUrl} hidden={isReady} />
-        <Photo
-          src={photo?.url}
-          hidden={!isReady}
-          onLoad={() => setIsReady(true)}
-        />
-      </MainContainer>
+      <Photo src={photo?.thumbnailUrl} hidden={isReady} />
+      <Photo
+        src={photo?.url}
+        hidden={!isReady}
+        onLoad={() => setIsReady(true)}
+      />
+
+      <h1>Title: {photo?.title}</h1>
+      <p>Album ID: {photo?.albumId}</p>
+      <p>
+        Link: <a href={photo?.url}>{photo?.url}</a>
+      </p>
     </PhotoPageContainer>
   );
 };

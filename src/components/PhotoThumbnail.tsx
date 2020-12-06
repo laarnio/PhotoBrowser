@@ -7,7 +7,7 @@ import { colors } from '../assets/other/colors';
 const ThumbNailContainer = styled.div`
   flex: 0 1 ${(props: ThumbNailContainerProps) => props.width}px;
   img {
-    border: 1px solid ${colors.brown.secondaryOne};
+    border: 1px solid ${(props) => props.theme.secondary};
     border-radius: 4px;
     padding: 5px;
 

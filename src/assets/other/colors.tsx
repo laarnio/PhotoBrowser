@@ -1,21 +1,35 @@
 export const colors: IColors = {
   brown: {
-    primary: '#4A2E00',
-    secondaryOne: '#8C5906',
-    secondaryTwo: '#CCAB76',
-    lightOne: '#FFFAF1',
-    lightTwo: '#efd1a1'
+    one: '#4A2E00',
+    two: '#8C5906',
+    three: '#CCAB76',
+    four: '#FFFAF1',
+    five: '#efd1a1'
+  },
+  green: {
+    one: '#A8DB92',
+    two: '#77B75B',
+    three: '#4E9231',
+    four: '#2E6E12',
+    five: '#164900'
+  },
+  takeOne: {
+    primary: '#1EA896',
+    secondary: '#3c8e83',
+    lightBackground: '#f3f5f4'
   }
 };
 
-export interface IColors {
+export type IColors = {
   brown: IColor;
-}
+  green: IColor;
+  takeOne: any;
+};
 
-export interface IColor {
-  primary: string;
-  secondaryOne: string;
-  secondaryTwo: string;
-  lightOne: string;
-  lightTwo: string;
-}
+export type IColor = {
+  one: string;
+  two: string;
+  three: string;
+  four: string;
+  five: string;
+};

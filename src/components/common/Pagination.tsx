@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../assets/other/colors';
 
 const PaginationContainer = styled.div`
-  background: ${colors.brown.lightTwo};
+  background-color: ${(props) => props.theme.primary};
   text-align: center;
   bottom: 0;
   border-radius: 5px;
@@ -28,13 +27,13 @@ const PaginationButton = styled.button`
   justify-content: space-between;
   border: none;
   border-radius: 5px;
-  color: ${colors.brown.secondaryOne};
+  color: ${(props) => props.theme.lightOne};
   font-weight: 700;
-  background: ${colors.brown.lightTwo};
+  background: ${(props) => props.theme.primary};
 
   :hover:not(.active) {
-    background-color: ${colors.brown.secondaryOne};
-    color: ${colors.brown.lightOne};
+    background-color: ${(props) => props.theme.secondary};
+    color: ${(props) => props.theme.lightOne};
     border-radius: 5px;
   }
   :disabled {

@@ -13,7 +13,7 @@ const Nav = styled.nav`
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #728da5;
+    background-color: ${(props) => props.theme.primary};
     text-align: center;
   }
 
@@ -27,7 +27,7 @@ const Nav = styled.nav`
 
   li a {
     display: block;
-    color: #133453;
+    color: ${(props) => props.theme.lightOne};
     text-align: center;
     padding: 14px 16px;
     font-weight: 500;
@@ -35,7 +35,7 @@ const Nav = styled.nav`
   }
 
   li a:hover:not(.active) {
-    background-color: #4a6b8a;
+    background-color: ${(props) => props.theme.secondary};
     text-decoration: none;
     border-radius: 5px;
   }

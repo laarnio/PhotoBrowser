@@ -13,15 +13,15 @@ const ContentContainer = styled.div`
 
 const SettingsButton = styled.button`
   padding: 6px 5px 4px 6px;
-  background-color: ${colors.brown.secondaryTwo};
-  color: ${colors.brown.secondaryOne};
+  background-color: ${(props) => props.theme.lightOne};
+  color: ${(props) => props.theme.primary};
   border: none;
   border-radius: 5px;
   font-weight: 700;
 
   :hover {
-    background-color: ${colors.brown.secondaryOne};
-    color: ${colors.brown.secondaryTwo};
+    background-color: ${(props) => props.theme.lightOne};
+    color: ${(props) => props.theme.secondary};
   }
 `;
 
@@ -33,10 +33,10 @@ const PhotoBrowserSettingsContainer = styled.div`
     props.visible ? 'transform: scaleY(1) ' : 'transform: scaleY(0);'};
   overflow: hidden;
   right: 64px;
-  background-color: ${colors.brown.secondaryTwo};
+  background-color: ${(props) => props.theme.lightOne};
   padding: 16px;
   box-shadow: 0 0 10px #000000;
-  color: ${colors.brown.secondaryOne};
+  color: ${(props) => props.theme.secondary};
 `;
 const SettingLabelText = styled.p`
   margin: 0;
