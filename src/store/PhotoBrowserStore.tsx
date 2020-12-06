@@ -1,117 +1,187 @@
 import create from 'zustand';
 import type { PhotoInfo } from 'components/PhotosPage';
+import { apiService } from '../../src/api/api';
+
+export type Album = {
+  id: number;
+  userId: number;
+  title: string;
+};
 
 export type State = {
-  photoBrowserSettings: PhotoBrowserSettings;
-  photoBrowserFunctions: PhotoBrowserFunctions;
-  allPhotoInfos: PhotoInfo[];
-};
-interface PhotoBrowserSettings {
-  currentPage: number;
-  limit: number;
-  lastPage: number;
-  thumbnailSize: number;
-  isPaginationSticky: boolean;
-  paginationNeighbours: number;
-}
+  photos: PhotoInfo[];
+  albums: Album[];
+  getAllPhotos: () => void;
+  getAllAlbums: () => void;
+  filters: {
+    albumId: number | null;
+    setAlbumFilter: (albumId: number) => void;
+  };
+  isLoadingPhotos: boolean;
+  isLoadingAlbums: boolean;
+  pagination: {
+    currentPage: number;
+    lastPage: number;
+    isPaginationSticky: boolean;
+    paginationNeighbours: number;
+    limit: number;
+    setNextPage: () => void;
+    setPreviousPage: () => void;
+    setPage: (page: number) => void;
+    setLimit: (limit: number) => void;
+    setLastPage: (page: number) => void;
+    togglePaginationSticky: () => void;
+    setPaginationNeighbours: (amount: number) => void;
+  };
 
-interface PhotoBrowserFunctions {
-  nextPage: Function;
-  previousPage: Function;
-  setPage: Function;
-  setLimit: Function;
-  setLastPage: Function;
-  setThumbnailSize: Function;
-  togglePaginationSticky: Function;
-  setPaginationNeighbours: Function;
-  setAllPhotoInfos: Function;
-}
+  thumbnails: {
+    thumbnailSize: number;
+    setThumbnailSize: (size: number) => void;
+  };
+};
 
 export const useStore = create<State>((set) => ({
-  photoBrowserSettings: {
-    currentPage: 1,
-    limit: 50,
-    lastPage: 1,
-    thumbnailSize: 150,
-    isPaginationSticky: true,
-    paginationNeighbours: 2
+  photos: [],
+  albums: [],
+  isLoadingPhotos: false,
+  isLoadingAlbums: false,
+  filters: {
+    albumId: null,
+    setAlbumFilter: (albumId: number) => {
+      set((state: State) => setAlbumFilter(state, albumId));
+    }
   },
-  photoBrowserFunctions: {
-    nextPage: () => set((state: State) => setNextPage(state)),
-    previousPage: () => set((state: State) => setPreviousPage(state)),
+
+  getAllPhotos: async () => {
+    set((state: State) => ({
+      ...state,
+      isLoadingPhotos: true
+    }));
+    const photos = await apiService.getAllPhotos();
+    set((state: State) => _setPhotos(state, photos));
+    set((state: State) => ({
+      ...state,
+      isLoadingPhotos: false
+    }));
+  },
+  getAllAlbums: async () => {
+    set((state: State) => ({
+      ...state,
+      isLoadingAlbums: true
+    }));
+    const albums = await apiService.getAllAlbums();
+    set((state: State) => _setAlbums(state, albums));
+    set((state: State) => ({
+      ...state,
+      isLoadingAlbums: false
+    }));
+  },
+  pagination: {
+    currentPage: 1,
+    lastPage: 1,
+    isPaginationSticky: true,
+    limit: 50,
+    paginationNeighbours: 2,
+    setNextPage: () => set((state: State) => setNextPage(state)),
+    setPreviousPage: () => set((state: State) => setPreviousPage(state)),
     setPage: (page: number) => set((state: State) => setPage(state, page)),
     setLimit: (limit: number) => set((state: State) => setLimit(state, limit)),
     setLastPage: (lastPage: number) =>
       set((state: State) => setLastPage(state, lastPage)),
-    setThumbnailSize: (newSize: number) =>
-      set((state: State) => setThumbnailSize(state, newSize)),
     togglePaginationSticky: () =>
       set((state: State) => togglePaginationSticky(state)),
     setPaginationNeighbours: (newNeighbourAmount: number) =>
-      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount)),
-    setAllPhotoInfos: (photoInfos: PhotoInfo[]) =>
-      set((state: State) => setPhotoInfos(state, photoInfos))
+      set((state: State) => setPaginationNeighbours(state, newNeighbourAmount))
   },
-  allPhotoInfos: []
+  thumbnails: {
+    thumbnailSize: 150,
+    setThumbnailSize: (newSize: number) =>
+      set((state: State) => setThumbnailSize(state, newSize))
+  }
 }));
 
-const setNextPage = (state: State) => {
+const _setPhotos = (state: State, photos: PhotoInfo[]) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      currentPage:
-        state.photoBrowserSettings.currentPage + 1 >
-        state.photoBrowserSettings.lastPage
-          ? state.photoBrowserSettings.lastPage
-          : state.photoBrowserSettings.currentPage + 1
+    photos,
+    pagination: {
+      ...state.pagination,
+      lastPage: Math.ceil(photos.length / state.pagination.limit)
     }
+  };
+
+  return newState;
+};
+
+const _setAlbums = (state: State, albums: Album[]) => {
+  const newState: State = {
+    ...state,
+    albums
   };
   return newState;
 };
 
+const setNextPage = (state: State) => {
+  let newState = state;
+  if (state.pagination.currentPage < state.pagination.lastPage) {
+    newState = {
+      ...state,
+      pagination: {
+        ...state.pagination,
+        currentPage: state.pagination.currentPage + 1
+      }
+    };
+  }
+  return newState;
+};
+
 const setPreviousPage = (state: State) => {
-  const newState: State = {
-    ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      currentPage:
-        state.photoBrowserSettings.currentPage - 1 < 1
-          ? 1
-          : state.photoBrowserSettings.currentPage - 1
-    }
-  };
+  let newState = state;
+  if (state.pagination.currentPage > 0) {
+    newState = {
+      ...state,
+      pagination: {
+        ...state.pagination,
+        currentPage: state.pagination.currentPage - 1
+      }
+    };
+  }
   return newState;
 };
 
 const setPage = (state: State, page: number) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
+    pagination: {
+      ...state.pagination,
       currentPage: page
     }
   };
+
   return newState;
 };
 
 const setLimit = (state: State, newLimit: number) => {
-  const newState: State = {
-    ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      currentPage: 1,
-      limit: newLimit
-    }
-  };
+  let newState = state;
+  if (newLimit <= 500 && newLimit > 0) {
+    newState = {
+      ...state,
+      pagination: {
+        ...state.pagination,
+        currentPage: 1,
+        limit: newLimit,
+        lastPage: Math.ceil(state.photos.length / state.pagination.limit)
+      }
+    };
+  }
   return newState;
 };
 
 const setLastPage = (state: State, newLastPage: number) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
+    pagination: {
+      ...state.pagination,
       lastPage: newLastPage
     }
   };
@@ -121,8 +191,8 @@ const setLastPage = (state: State, newLastPage: number) => {
 const setThumbnailSize = (state: State, newSize: number) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
+    thumbnails: {
+      ...state.thumbnails,
       thumbnailSize: newSize
     }
   };
@@ -132,9 +202,9 @@ const setThumbnailSize = (state: State, newSize: number) => {
 const togglePaginationSticky = (state: State) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
-      isPaginationSticky: !state.photoBrowserSettings.isPaginationSticky
+    pagination: {
+      ...state.pagination,
+      isPaginationSticky: !state.pagination.isPaginationSticky
     }
   };
   return newState;
@@ -143,18 +213,25 @@ const togglePaginationSticky = (state: State) => {
 const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
   const newState: State = {
     ...state,
-    photoBrowserSettings: {
-      ...state.photoBrowserSettings,
+    pagination: {
+      ...state.pagination,
       paginationNeighbours: newNeighbourAmount
     }
   };
   return newState;
 };
-const setPhotoInfos = (state: State, photoInfos: PhotoInfo[]) => {
-  const newState: State = {
-    ...state,
-    allPhotoInfos: photoInfos
-  };
 
+const setAlbumFilter = (state: State, albumId: number) => {
+  let newState: State = {
+    ...state,
+    filters: {
+      ...state.filters,
+      albumId: albumId
+    },
+    pagination: {
+      ...state.pagination,
+      currentPage: 1
+    }
+  };
   return newState;
 };

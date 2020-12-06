@@ -3,6 +3,8 @@ import { render } from '@testing-library/react';
 import { expect } from 'chai';
 
 import Select, { SelectOption } from './Select';
+import { ThemeProvider } from 'styled-components';
+import { theme } from '../Layout';
 
 describe('<Select>', () => {
   it('Renders options and has default value correctly', () => {
@@ -10,11 +12,13 @@ describe('<Select>', () => {
     const optionTwo = createOption(2, 'Foobar');
     const options: SelectOption[] = [optionOne, optionTwo];
     const { getByText } = render(
-      <Select
-        options={options}
-        defaultOption={optionOne}
-        onChange={(value: number) => value}
-      />
+      <ThemeProvider theme={theme}>
+        <Select
+          options={options}
+          defaultOption={optionOne}
+          onChange={(value: number) => value}
+        />
+      </ThemeProvider>
     );
     const optionOneElement = getByText(/test/i);
     const optionTwoElement = getByText(/Foobar/i);
