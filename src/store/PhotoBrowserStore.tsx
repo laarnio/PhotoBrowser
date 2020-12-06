@@ -186,7 +186,7 @@ const setPage = (state: State, page: number) => {
 
 const setLimit = (state: State, newLimit: number) => {
   let newState = state;
-  if (newLimit < 500 && newLimit > 0) {
+  if (newLimit <= 500 && newLimit > 0) {
     newState = {
       ...state,
       pagination: {
@@ -310,7 +310,7 @@ const setAlbumFilter = (state: State, albumId: number) => {
 const applyFilters = (state: State) => {
   let newState = state;
   let displayedPhotos = state.photos;
-  console.log(state.filters);
+
   if (state.filters.albumId) {
     displayedPhotos = state.photos.filter(
       (photo) => photo.albumId === state.filters.albumId

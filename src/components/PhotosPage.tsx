@@ -114,12 +114,14 @@ const PhotosPage = () => {
           }
         />
       )}
-
-      <PhotoThumbnails
-        height={store.thumbnails.thumbnailSize}
-        width={store.thumbnails.thumbnailSize}
-        photos={store.displayedPhotos.slice(sliceStart, sliceStart + sliceEnd)}
-      />
+      <PhotoThumbnailContent>
+        <PhotoThumbnails
+          height={store.thumbnails.thumbnailSize}
+          width={store.thumbnails.thumbnailSize}
+          photos={store.displayedPhotos.slice(sliceStart, sliceEnd)}
+        />
+      </PhotoThumbnailContent>
+      
 
       <Pagination
         totalPages={Math.ceil(
