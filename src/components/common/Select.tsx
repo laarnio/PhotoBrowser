@@ -13,8 +13,7 @@ const Select: React.FC<SelectProps> = ({
   options = options.sort(
     (a: SelectOption, b: SelectOption) => a.value - b.value
   );
-  console.log(options, 'optionis');
-  console.log(defaultOption);
+
   return (
     <StyledSelect
       defaultValue={defaultOption?.value}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { colors } from '../assets/other/colors';
 
 const ThumbNailContainer = styled.div`
-  display: inline-block;
+  flex: 0 1 ${(props: ThumbNailContainerProps) => props.width}px;
   img {
     border: 1px solid ${colors.brown.secondaryOne};
     border-radius: 4px;

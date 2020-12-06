@@ -60,7 +60,6 @@ const PhotoBrowserSettingsComponent = () => {
   const defaultOption = store.thumbnails.thumbnailsPerPageOptions.find(
     (option) => option.value == store.pagination.limit
   );
-  console.log(defaultOption);
 
   return (
     <ContentContainer>

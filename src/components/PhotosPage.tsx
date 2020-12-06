@@ -5,13 +5,13 @@ import Pagination from './common/Pagination';
 import PhotoBrowserSettingsComponent from './PhotoBrowserSettings';
 import styled from 'styled-components';
 import { useLocation, useHistory } from 'react-router-dom';
+import Select, { SelectOption } from './common/Select';
 
 export type PhotoInfo = {
   albumId: number;
   id: number;
   title: string;
   url: string;
-  hers: number;
   thumbnailUrl: string;
 };
 
@@ -28,6 +28,7 @@ const PhotosPage = () => {
 
   useEffect(() => {
     store.getAllPhotos();
+    store.getAllAlbums();
     handleQueryParams();
   }, []);
 
@@ -77,25 +78,53 @@ const PhotosPage = () => {
     });
   };
 
+  const allOption: SelectOption = {
+    label: 'All',
+    value: null
+  };
+
+  let albumOptions = store.albums
+    .map((album) => ({
+      label: album.id.toString(),
+      value: album.id
+    }))
+    .concat(allOption);
+
   const sliceStart =
     store.pagination.currentPage * store.pagination.limit -
     store.pagination.limit;
+
   const sliceEnd = sliceStart + store.pagination.limit;
+
   return (
     <>
       <PhotoBrowserHeaderContainer>
-        <PhotoBrowserSettingsComponent />
+        {!store.isLoading.albums && !store.isLoading.photos && (
+          <PhotoBrowserSettingsComponent />
+        )}
         <p>Total photo count: {store.photos.length}</p>
       </PhotoBrowserHeaderContainer>
+
+      {!store.isLoading.albums && (
+        <Select
+          options={albumOptions}
+          defaultOption={allOption}
+          onChange={(albumId: string) =>
+            store.filters.setAlbumFilter(parseInt(albumId))
+          }
+        />
+      )}
 
       <PhotoThumbnails
         height={store.thumbnails.thumbnailSize}
         width={store.thumbnails.thumbnailSize}
-        photos={store.photos.slice(sliceStart, sliceStart + sliceEnd)}
+        photos={store.displayedPhotos.slice(sliceStart, sliceStart + sliceEnd)}
       />
 
       <Pagination
-        totalPages={Math.ceil(store.photos.length / store.pagination.limit)}
+        totalPages={Math.ceil(
+          store.displayedPhotos.length / store.pagination.limit
+        )}
         currentPage={store.pagination.currentPage || 1}
         nextPage={store.pagination.setNextPage}
         previousPage={store.pagination.setPreviousPage}

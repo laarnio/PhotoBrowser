@@ -3,10 +3,28 @@ import type { PhotoInfo } from 'components/PhotosPage';
 import { apiService } from '../../src/api/api';
 import type { SelectOption } from 'components/common/Select';
 
+export type Album = {
+  id: number;
+  userId: number;
+  title: string;
+};
+
 export type State = {
   photos: PhotoInfo[];
+  displayedPhotos: PhotoInfo[];
+  albums: Album[];
+  filters: {
+    albumId: number | null;
+    setAlbumFilter: (albumId: number) => void;
+  };
+  isLoading: {
+    photos: boolean;
+    albums: boolean;
+  };
   setPhotos: (photos: PhotoInfo[]) => void;
   getAllPhotos: () => void;
+  getAllAlbums: () => void;
+  setAlbums: (albums: Album[]) => void;
 
   pagination: {
     currentPage: number;
@@ -56,11 +74,49 @@ const thumbnailsPerPageOptions: SelectOption[] = [
 
 export const useStore = create<State>((set) => ({
   photos: [],
+  displayedPhotos: [],
+  albums: [],
+  isLoading: {
+    photos: false,
+    albums: false
+  },
+  filters: {
+    albumId: null,
+    setAlbumFilter: (albumId: number) => {
+      set((state: State) => setAlbumFilter(state, albumId));
+      set((state: State) => applyFilters(state));
+    }
+  },
+
   setPhotos: (photos: PhotoInfo[]) =>
     set((state: State) => setPhotos(state, photos)),
+  setDisplayedPhotos: (photos: PhotoInfo[]) =>
+    set((state: State) => setDisplayedPhotos(state, photos)),
   getAllPhotos: async () => {
+    set((state: State) => ({
+      ...state,
+      isLoading: { ...state.isLoading, photos: true }
+    }));
     const photos = await apiService.getAllPhotos();
     set((state: State) => setPhotos(state, photos));
+    set((state: State) => ({
+      ...state,
+      isLoading: { ...state.isLoading, photos: false }
+    }));
+  },
+  setAlbums: (albums: Album[]) =>
+    set((state: State) => setAlbums(state, albums)),
+  getAllAlbums: async () => {
+    set((state: State) => ({
+      ...state,
+      isLoading: { ...state.isLoading, albums: true }
+    }));
+    const albums = await apiService.getAllAlbums();
+    set((state: State) => setAlbums(state, albums));
+    set((state: State) => ({
+      ...state,
+      isLoading: { ...state.isLoading, albums: false }
+    }));
   },
   pagination: {
     currentPage: 1,
@@ -191,12 +247,83 @@ const setPhotos = (state: State, photos: PhotoInfo[]) => {
   const newState: State = {
     ...state,
     photos,
+    displayedPhotos: photos,
     pagination: {
       ...state.pagination,
       lastPage: Math.ceil(photos.length / state.pagination.limit)
     }
   };
 
+  return newState;
+};
+
+const setDisplayedPhotos = (state: State, photos: PhotoInfo[]) => {
+  let newState = state;
+  if (state.filters.albumId && state.filters.albumId > 0) {
+    newState = {
+      ...state,
+      displayedPhotos: state.photos.filter(
+        (photo) => photo.albumId == state.filters.albumId
+      ),
+      pagination: {
+        ...state.pagination,
+        lastPage: Math.ceil(
+          state.displayedPhotos.length / state.pagination.limit
+        )
+      }
+    };
+  } else {
+    newState = {
+      ...state,
+      displayedPhotos: state.photos,
+      pagination: {
+        ...state.pagination,
+        lastPage: Math.ceil(
+          state.displayedPhotos.length / state.pagination.limit
+        )
+      }
+    };
+  }
+
+  return newState;
+};
+
+const setAlbums = (state: State, albums: Album[]) => {
+  const newState: State = {
+    ...state,
+    albums
+  };
+  return newState;
+};
+
+const setAlbumFilter = (state: State, albumId: number) => {
+  let newState: State = {
+    ...state,
+    filters: {
+      ...state.filters,
+      albumId: albumId
+    }
+  };
+  return newState;
+};
+
+const applyFilters = (state: State) => {
+  let newState = state;
+  let displayedPhotos = state.photos;
+  console.log(state.filters);
+  if (state.filters.albumId) {
+    displayedPhotos = state.photos.filter(
+      (photo) => photo.albumId === state.filters.albumId
+    );
+  }
+  newState = {
+    ...state,
+    displayedPhotos,
+    pagination: {
+      ...state.pagination,
+      lastPage: Math.ceil(displayedPhotos.length / state.pagination.limit)
+    }
+  };
   return newState;
 };
 

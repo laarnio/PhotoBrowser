@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useStore, State } from '../store/PhotoBrowserStore';
-import { apiService } from '../api/api';
-import type { PhotoInfo } from '../components/PhotosPage';
 import styled from 'styled-components';
 
 interface ParamTypes {

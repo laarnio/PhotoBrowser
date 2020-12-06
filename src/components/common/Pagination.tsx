@@ -81,6 +81,9 @@ const Pagination: React.FC<PaginationComponentProps> = ({
   } else if (NEAR_END) {
     endIndex = totalPages;
     startIndex = endIndex - PAGE_NUMBERS_VISIBLE;
+    if (startIndex < 0) {
+      startIndex = 0;
+    }
   }
 
   const displayedPageNumbers = pageNumbers.slice(startIndex, endIndex);
@@ -98,7 +101,10 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       </PaginationButton>
       {displayedPageNumbers.map((pageNumber) =>
         pageNumber !== currentPage ? (
-          <PaginationButton key={pageNumber} onClick={() => nextPage()}>
+          <PaginationButton
+            key={pageNumber}
+            onClick={() => setPage(pageNumber)}
+          >
             {pageNumber}
           </PaginationButton>
         ) : (

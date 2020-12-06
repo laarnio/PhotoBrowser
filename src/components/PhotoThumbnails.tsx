@@ -5,6 +5,9 @@ import styled from 'styled-components';
 
 const PhotoThumbnailsContainer = styled.div`
   min-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const PhotoThumbnails: React.FC<{
