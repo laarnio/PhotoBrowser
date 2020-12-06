@@ -15,10 +15,17 @@ export type PhotoInfo = {
   thumbnailUrl: string;
 };
 
-const PhotoBrowserHeaderContainer = styled.div`
+const PhotoThumbnailContent = styled.div`
+  min-height: 50vh;
+`;
+
+const Grid = styled.div`
   display: grid;
-  place-items: center;
   grid-template-columns: repeat(12, fr);
+`;
+
+const SelectContainer = styled.div`
+  grid-column: 1/2;
 `;
 
 const PhotosPage = () => {
@@ -35,20 +42,20 @@ const PhotosPage = () => {
   const handleQueryParams = () => {
     const queryParams = new URLSearchParams(location.search);
     let param = queryParams.get('page');
-    const page = param ? parseInt(param) : null;
+    const page = param ? parseInt(param, 10) : null;
     param = queryParams.get('limit');
-    const limit = param ? parseInt(param) : null;
+    const limit = param ? parseInt(param, 10) : null;
     const thumbnailSize = queryParams.get('thumbnailSize');
     const paginationNeighbours = queryParams.get('paginationNeighbours');
 
-    if (page && store.pagination.currentPage != page) {
+    if (page && store.pagination.currentPage !== page) {
       store.pagination.setPage(page);
       queryParams.delete('page');
     }
-    if (limit && store.pagination.limit != limit) {
+    if (limit && store.pagination.limit !== limit) {
       if (
         !store.thumbnails.thumbnailsPerPageOptions.find(
-          (option) => option.value == limit
+          (option) => option.value === limit
         )
       ) {
         store.thumbnails.addThumbnailPerPageOption({
@@ -61,16 +68,19 @@ const PhotosPage = () => {
     }
     if (
       thumbnailSize &&
-      store.thumbnails.thumbnailSize != parseInt(thumbnailSize)
+      store.thumbnails.thumbnailSize !== parseInt(thumbnailSize, 10)
     ) {
-      store.thumbnails.setThumbnailSize(parseInt(thumbnailSize));
+      store.thumbnails.setThumbnailSize(parseInt(thumbnailSize, 10));
       queryParams.delete('thumbnailSize');
     }
     if (
       paginationNeighbours &&
-      store.pagination.paginationNeighbours != parseInt(paginationNeighbours)
+      store.pagination.paginationNeighbours !==
+        parseInt(paginationNeighbours, 10)
     ) {
-      store.pagination.setPaginationNeighbours(parseInt(paginationNeighbours));
+      store.pagination.setPaginationNeighbours(
+        parseInt(paginationNeighbours, 10)
+      );
       queryParams.delete('paginationNeighbours');
     }
     history.replace({
@@ -90,43 +100,46 @@ const PhotosPage = () => {
     }))
     .concat(allOption);
 
-  const sliceStart =
-    store.pagination.currentPage * store.pagination.limit -
-    store.pagination.limit;
-
-  const sliceEnd = sliceStart + store.pagination.limit;
+  const filterPhotos = () => {
+    let filteredPhotos = store.photos;
+    if (store.filters.albumId) {
+      filteredPhotos = filteredPhotos.filter(
+        (photo) => photo.albumId === store.filters.albumId
+      );
+    }
+    return filteredPhotos;
+  };
 
   return (
     <>
-      <PhotoBrowserHeaderContainer>
-        {!store.isLoading.albums && !store.isLoading.photos && (
+      <Grid>
+        {!store.isLoadingAlbums && !store.isLoadingPhotos && (
           <PhotoBrowserSettingsComponent />
         )}
         <p>Total photo count: {store.photos.length}</p>
-      </PhotoBrowserHeaderContainer>
+        {!store.isLoadingAlbums && (
+          <SelectContainer>
+            Filter by album:
+            <Select
+              options={albumOptions}
+              defaultOption={allOption}
+              onChange={(albumId: string) =>
+                store.filters.setAlbumFilter(parseInt(albumId))
+              }
+            />
+          </SelectContainer>
+        )}
+      </Grid>
 
-      {!store.isLoading.albums && (
-        <Select
-          options={albumOptions}
-          defaultOption={allOption}
-          onChange={(albumId: string) =>
-            store.filters.setAlbumFilter(parseInt(albumId))
-          }
-        />
-      )}
       <PhotoThumbnailContent>
         <PhotoThumbnails
           height={store.thumbnails.thumbnailSize}
           width={store.thumbnails.thumbnailSize}
-          photos={store.displayedPhotos.slice(sliceStart, sliceEnd)}
         />
       </PhotoThumbnailContent>
-      
 
       <Pagination
-        totalPages={Math.ceil(
-          store.displayedPhotos.length / store.pagination.limit
-        )}
+        totalPages={Math.ceil(filterPhotos().length / store.pagination.limit)}
         currentPage={store.pagination.currentPage || 1}
         nextPage={store.pagination.setNextPage}
         previousPage={store.pagination.setPreviousPage}

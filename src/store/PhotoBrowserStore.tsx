@@ -2,6 +2,7 @@ import create from 'zustand';
 import type { PhotoInfo } from 'components/PhotosPage';
 import { apiService } from '../../src/api/api';
 import type { SelectOption } from 'components/common/Select';
+import { useLocation, useHistory } from 'react-router-dom';
 
 export type Album = {
   id: number;
@@ -11,21 +12,15 @@ export type Album = {
 
 export type State = {
   photos: PhotoInfo[];
-  displayedPhotos: PhotoInfo[];
   albums: Album[];
+  getAllPhotos: () => void;
+  getAllAlbums: () => void;
   filters: {
     albumId: number | null;
     setAlbumFilter: (albumId: number) => void;
   };
-  isLoading: {
-    photos: boolean;
-    albums: boolean;
-  };
-  setPhotos: (photos: PhotoInfo[]) => void;
-  getAllPhotos: () => void;
-  getAllAlbums: () => void;
-  setAlbums: (albums: Album[]) => void;
-
+  isLoadingPhotos: boolean;
+  isLoadingAlbums: boolean;
   pagination: {
     currentPage: number;
     lastPage: number;
@@ -74,48 +69,38 @@ const thumbnailsPerPageOptions: SelectOption[] = [
 
 export const useStore = create<State>((set) => ({
   photos: [],
-  displayedPhotos: [],
   albums: [],
-  isLoading: {
-    photos: false,
-    albums: false
-  },
+  isLoadingPhotos: false,
+  isLoadingAlbums: false,
   filters: {
     albumId: null,
     setAlbumFilter: (albumId: number) => {
       set((state: State) => setAlbumFilter(state, albumId));
-      set((state: State) => applyFilters(state));
     }
   },
 
-  setPhotos: (photos: PhotoInfo[]) =>
-    set((state: State) => setPhotos(state, photos)),
-  setDisplayedPhotos: (photos: PhotoInfo[]) =>
-    set((state: State) => setDisplayedPhotos(state, photos)),
   getAllPhotos: async () => {
     set((state: State) => ({
       ...state,
-      isLoading: { ...state.isLoading, photos: true }
+      isLoadingPhotos: true
     }));
     const photos = await apiService.getAllPhotos();
-    set((state: State) => setPhotos(state, photos));
+    set((state: State) => _setPhotos(state, photos));
     set((state: State) => ({
       ...state,
-      isLoading: { ...state.isLoading, photos: false }
+      isLoadingPhotos: false
     }));
   },
-  setAlbums: (albums: Album[]) =>
-    set((state: State) => setAlbums(state, albums)),
   getAllAlbums: async () => {
     set((state: State) => ({
       ...state,
-      isLoading: { ...state.isLoading, albums: true }
+      isLoadingAlbums: true
     }));
     const albums = await apiService.getAllAlbums();
-    set((state: State) => setAlbums(state, albums));
+    set((state: State) => _setAlbums(state, albums));
     set((state: State) => ({
       ...state,
-      isLoading: { ...state.isLoading, albums: false }
+      isLoadingAlbums: false
     }));
   },
   pagination: {
@@ -144,6 +129,27 @@ export const useStore = create<State>((set) => ({
       set((state: State) => setThumbnailSize(state, newSize))
   }
 }));
+
+const _setPhotos = (state: State, photos: PhotoInfo[]) => {
+  const newState: State = {
+    ...state,
+    photos,
+    pagination: {
+      ...state.pagination,
+      lastPage: Math.ceil(photos.length / state.pagination.limit)
+    }
+  };
+
+  return newState;
+};
+
+const _setAlbums = (state: State, albums: Album[]) => {
+  const newState: State = {
+    ...state,
+    albums
+  };
+  return newState;
+};
 
 const setNextPage = (state: State) => {
   let newState = state;
@@ -181,6 +187,7 @@ const setPage = (state: State, page: number) => {
       currentPage: page
     }
   };
+
   return newState;
 };
 
@@ -191,6 +198,7 @@ const setLimit = (state: State, newLimit: number) => {
       ...state,
       pagination: {
         ...state.pagination,
+        currentPage: 1,
         limit: newLimit,
         lastPage: Math.ceil(state.photos.length / state.pagination.limit)
       }
@@ -243,85 +251,16 @@ const setPaginationNeighbours = (state: State, newNeighbourAmount: number) => {
   return newState;
 };
 
-const setPhotos = (state: State, photos: PhotoInfo[]) => {
-  const newState: State = {
-    ...state,
-    photos,
-    displayedPhotos: photos,
-    pagination: {
-      ...state.pagination,
-      lastPage: Math.ceil(photos.length / state.pagination.limit)
-    }
-  };
-
-  return newState;
-};
-
-const setDisplayedPhotos = (state: State, photos: PhotoInfo[]) => {
-  let newState = state;
-  if (state.filters.albumId && state.filters.albumId > 0) {
-    newState = {
-      ...state,
-      displayedPhotos: state.photos.filter(
-        (photo) => photo.albumId == state.filters.albumId
-      ),
-      pagination: {
-        ...state.pagination,
-        lastPage: Math.ceil(
-          state.displayedPhotos.length / state.pagination.limit
-        )
-      }
-    };
-  } else {
-    newState = {
-      ...state,
-      displayedPhotos: state.photos,
-      pagination: {
-        ...state.pagination,
-        lastPage: Math.ceil(
-          state.displayedPhotos.length / state.pagination.limit
-        )
-      }
-    };
-  }
-
-  return newState;
-};
-
-const setAlbums = (state: State, albums: Album[]) => {
-  const newState: State = {
-    ...state,
-    albums
-  };
-  return newState;
-};
-
 const setAlbumFilter = (state: State, albumId: number) => {
   let newState: State = {
     ...state,
     filters: {
       ...state.filters,
       albumId: albumId
-    }
-  };
-  return newState;
-};
-
-const applyFilters = (state: State) => {
-  let newState = state;
-  let displayedPhotos = state.photos;
-
-  if (state.filters.albumId) {
-    displayedPhotos = state.photos.filter(
-      (photo) => photo.albumId === state.filters.albumId
-    );
-  }
-  newState = {
-    ...state,
-    displayedPhotos,
+    },
     pagination: {
       ...state.pagination,
-      lastPage: Math.ceil(displayedPhotos.length / state.pagination.limit)
+      currentPage: 1
     }
   };
   return newState;

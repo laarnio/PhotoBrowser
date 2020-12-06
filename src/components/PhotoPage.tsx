@@ -25,18 +25,6 @@ const Photo = styled.img`
 `;
 
 const PhotoPageContainer = styled.div``;
-const PhotoPageHeader = styled.div`
-  padding: 2rem;
-  width: 100%;
-`;
-const LeftContainer = styled.div`
-  flex: 0 1 250px;
-  margin 5px;
-`;
-const MainContainer = styled.div`
-  flex: 1 1 250px;
-  margin: 5px;
-`;
 
 const PhotoPage = () => {
   let { id } = useParams<ParamTypes>();

@@ -3,25 +3,22 @@ import Select, { SelectOption } from './common/Select';
 import { useStore, State } from '../store/PhotoBrowserStore';
 import Slider from 'react-input-slider';
 import styled from 'styled-components';
-import { colors } from '../assets/other/colors';
 import { FiSettings } from 'react-icons/fi';
 
-const ContentContainer = styled.div`
-  grid-column: 12/12;
-  place-items: center;
-`;
+const ContentContainer = styled.div``;
 
 const SettingsButton = styled.button`
-  padding: 6px 5px 4px 6px;
+  border: none;  
+  padding: 4px 5px 4px 5px
   background-color: ${(props) => props.theme.lightOne};
   color: ${(props) => props.theme.primary};
-  border: none;
+  
   border-radius: 5px;
-  font-weight: 700;
+  grid-column:12/12;
 
   :hover {
-    background-color: ${(props) => props.theme.lightOne};
-    color: ${(props) => props.theme.secondary};
+    background-color: ${(props) => props.theme.primary};
+    color: ${(props) => props.theme.lightOne};
   }
 `;
 
@@ -53,8 +50,8 @@ const PhotoBrowserSettingsComponent = () => {
   const [settingsVisible, setSettingsVisible] = useState(false);
   const store = useStore((state: State) => state);
 
-  const handleSelectChange = (thumbnailsPerPage: number) => {
-    store.pagination.setLimit(thumbnailsPerPage);
+  const handleSelectChange = (thumbnailsPerPage: string) => {
+    store.pagination.setLimit(parseInt(thumbnailsPerPage));
   };
 
   const defaultOption = store.thumbnails.thumbnailsPerPageOptions.find(
@@ -62,7 +59,7 @@ const PhotoBrowserSettingsComponent = () => {
   );
 
   return (
-    <ContentContainer>
+    <>
       <SettingsButton onClick={() => setSettingsVisible(!settingsVisible)}>
         <FiSettings size={20} />
       </SettingsButton>
@@ -72,7 +69,7 @@ const PhotoBrowserSettingsComponent = () => {
           <SettingLabelText>Items per page:</SettingLabelText>
           <Select
             defaultOption={defaultOption}
-            onChange={(thumbnailsPerPage: number) =>
+            onChange={(thumbnailsPerPage: string) =>
               handleSelectChange(thumbnailsPerPage)
             }
             options={store.thumbnails.thumbnailsPerPageOptions}
@@ -118,7 +115,7 @@ const PhotoBrowserSettingsComponent = () => {
           />
         </Setting>
       </PhotoBrowserSettingsContainer>
-    </ContentContainer>
+    </>
   );
 };
 

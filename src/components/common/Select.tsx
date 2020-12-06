@@ -7,26 +7,33 @@ const StyledSelect = styled.select`
   width: 100%;
   text-align: center;
 `;
+
+const LabelText = styled.label``;
+
 const Select: React.FC<SelectProps> = ({
   options,
   onChange,
-  defaultOption
+  defaultOption,
+  label
 }) => {
   options = options.sort(
     (a: SelectOption, b: SelectOption) => a.value - b.value
   );
 
   return (
-    <StyledSelect
-      defaultValue={defaultOption?.value}
-      onChange={(e) => onChange(e.currentTarget.value)}
-    >
-      {options.map((option: SelectOption) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </StyledSelect>
+    <>
+      <LabelText>{label}</LabelText>
+      <StyledSelect
+        defaultValue={defaultOption?.value}
+        onChange={(e) => onChange(e.currentTarget.value)}
+      >
+        {options.map((option: SelectOption) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </StyledSelect>
+    </>
   );
 };
 
@@ -36,6 +43,7 @@ interface SelectProps {
   options: SelectOption[];
   onChange: Function;
   defaultOption?: SelectOption;
+  label?: string;
 }
 
 export type SelectOption = {

@@ -10,10 +10,6 @@ import { colors } from '../assets/other/colors';
 const Banner = styled.div`
   background-image: url(${bannerImage});
   background-size: cover;
-  color: ${(props) => props.theme.lightOne};
-  font-family: Snell Roundhand, cursive;
-  font-weight: 700;
-  font-size: 100px;
   height: 180px;
   text-align: center;
 `;
@@ -34,6 +30,7 @@ const Container = styled.main`
 
 const Wrapper = styled.div`
   color: ${(props) => props.theme.primary};
+  min-height: 100vh;
 `;
 
 const theme: ITheme = {
@@ -55,7 +52,7 @@ const Layout: FunctionComponent = ({ children }) => {
     <Wrapper>
       <ThemeProvider theme={theme}>
         <NavBar />
-        <Banner>PhotoBrowser</Banner>
+        <Banner></Banner>
         <Container>{children}</Container>
         <Footer />
       </ThemeProvider>

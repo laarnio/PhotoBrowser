@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { PhotoInfo } from './PhotosPage';
 import PhotoThumbnail from './PhotoThumbnail';
 import styled from 'styled-components';
+import { useStore, State } from '../store/PhotoBrowserStore';
 
 const PhotoThumbnailsContainer = styled.div`
   min-height: 200px;
@@ -11,15 +12,29 @@ const PhotoThumbnailsContainer = styled.div`
 `;
 
 const PhotoThumbnails: React.FC<{
-  photos: PhotoInfo[];
   height: number;
   width: number;
-}> = ({ photos, height, width }) => {
-  if (!photos) return <p> Loading </p>;
+}> = ({ height, width }) => {
+  const store = useStore((state: State) => state);
+
+  const filterPhotos = () => {
+    let filteredPhotos = store.photos;
+    if (store.filters.albumId) {
+      filteredPhotos = filteredPhotos.filter(
+        (photo) => photo.albumId === store.filters.albumId
+      );
+    }
+    const sliceStart =
+      store.pagination.currentPage * store.pagination.limit -
+      store.pagination.limit;
+    const sliceEnd = sliceStart + store.pagination.limit;
+
+    return (filteredPhotos = filteredPhotos.slice(sliceStart, sliceEnd));
+  };
 
   return (
     <PhotoThumbnailsContainer>
-      {photos.map((photo: PhotoInfo) => (
+      {filterPhotos().map((photo: PhotoInfo) => (
         <PhotoThumbnail
           width={width}
           height={height}
