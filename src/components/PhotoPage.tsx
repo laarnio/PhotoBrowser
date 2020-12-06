@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useStore, State } from '../store/PhotoBrowserStore';
-import { apiService } from '../api/api';
-import type { PhotoInfo } from '../components/PhotosPage';
 import styled from 'styled-components';
 
 interface ParamTypes {
@@ -10,46 +8,52 @@ interface ParamTypes {
 }
 
 const Photo = styled.img`
+  display: ${(props: { hidden: boolean }) => (props.hidden ? 'none' : 'block')}
   width: 600px;
   height: 600px;
+  grid-column: 2 / 4;
+
+  @media screen and (max-width: 664px) {
+    width: 300px;
+    height: 300px;
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
-interface ImageContainerProps {
-  visible?: boolean;
-}
+const PhotoPageContainer = styled.div``;
 
 const PhotoPage = () => {
   let { id } = useParams<ParamTypes>();
-  const photoInfoFromStore = useStore((state: State) =>
-    state.allPhotoInfos.find((photoInfo) => photoInfo.id === parseInt(id))
-  );
-  const [photoInfo, setPhotoInfo] = useState<PhotoInfo | null | undefined>(
-    photoInfoFromStore
-  );
+  const store = useStore((state: State) => state);
   const [isReady, setIsReady] = useState(false);
+  //const [photo, setPhoto] = useState<PhotoInfo | null>(null);
 
   useEffect(() => {
-    if (!photoInfo) {
-      apiService.getPhotoInfoById(parseInt(id)).then((res) => {
-        setPhotoInfo(res);
-      });
+    if (store.photos.length === 0) {
+      store.getAllPhotos();
     }
   }, []);
 
-  const img = new Image();
-  if (photoInfo != null) {
-    img.src = photoInfo.url;
-    img.onload = () => {
-      setIsReady(true);
-    };
-  }
-
+  let photo = store.photos.find((photo) => photo.id === parseInt(id));
   return (
-    <div>
-      <h1>Photo id: {id}</h1>
-      <Photo src={isReady ? photoInfo?.url : photoInfo?.thumbnailUrl} />
-      {photoInfo?.title}
-    </div>
+    <PhotoPageContainer>
+      <Photo src={photo?.thumbnailUrl} hidden={isReady} />
+      <Photo
+        src={photo?.url}
+        hidden={!isReady}
+        onLoad={() => setIsReady(true)}
+      />
+
+      <h1>Title: {photo?.title}</h1>
+      <p>Album ID: {photo?.albumId}</p>
+      <p>
+        Link: <a href={photo?.url}>{photo?.url}</a>
+      </p>
+    </PhotoPageContainer>
   );
 };
 export default PhotoPage;

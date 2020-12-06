@@ -1,11 +1,13 @@
 import axios from 'axios';
 import type { PhotoInfo } from '../components/PhotosPage';
+import type { Album } from '../store/PhotoBrowserStore';
 
 export const apiService = {
   getAllPhotos: () => getAllPhotos(),
   getPhotoInfoById: (id: number) => getPhotoInfoById(id),
   getCurrentPagePhotoInfos: (currentPage: number, limit: number) =>
-    getCurrentPagePhotoInfos(currentPage, limit)
+    getCurrentPagePhotoInfos(currentPage, limit),
+  getAllAlbums: () => getAllAlbums()
 };
 
 const getAllPhotos = (): Promise<PhotoInfo[]> => {
@@ -22,9 +24,15 @@ const getCurrentPagePhotoInfos = (
   currentPage: number,
   limit: number
 ): Promise<PhotoInfo[]> => {
-  const currentPagePhotosURI = `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}}`;
+  const currentPagePhotosURI = `https://jsonplaceholder.typicode.com/photos?_page=${currentPage}&_limit=${limit}`;
   return get(currentPagePhotosURI).then((res) => res.data);
 };
+
+const getAllAlbums = (): Promise<Album[]> => {
+  const allAlbumsUri = `https://jsonplaceholder.typicode.com/albums`;
+  return get(allAlbumsUri).then((res) => res.data);
+};
+
 const get = (url: string) => {
   return axios.get(url);
 };

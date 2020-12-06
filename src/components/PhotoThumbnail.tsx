@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import type { PhotoInfo } from './PhotosPage';
 import { Link } from 'react-router-dom';
 
 const ThumbNailContainer = styled.div`
-  display: inline-block;
+  flex: 0 1 ${(props: ThumbNailContainerProps) => props.width}px;
   img {
-    border: 1px solid #ddd;
+    border: 1px solid ${(props) => props.theme.secondary};
     border-radius: 4px;
     padding: 5px;
+
     width: ${(props: ThumbNailContainerProps) => props.width}px;
     height: ${(props: ThumbNailContainerProps) => props.height}px;
   }
