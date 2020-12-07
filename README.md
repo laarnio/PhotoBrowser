@@ -1,25 +1,45 @@
-# New Project
+# PhotoBrowser
 
 > ✨ Bootstrapped with Create Snowpack App (CSA).
+## Features
+1. Browse photos by thumbnails.
+2. Use settings to change *thumbnails per page*, *thumbnail size*, *pagination stickyness* and *pagination neighbour amount*
+3. Use query-parameters for these options:  /photos?page=3&limit=13&thumbnailSize=50&paginationNeighbours=3 will get you the right 
+4. Filter photos by album
 
-## Available Scripts
 
-### npm start
+## Install local
+1. Clone this repository to your local machine
+2. run **´yarn install´** on terminal
+3. run **´yarn run start´** on terminal
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+## Other scripts
+1. **`yarn run build`**,
+2. **`yarn run test`**,
+3. **`yarn run format`**: runs *prettier* to codebase
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+## Technologies
+### Build tool:          
+Snowpack - https://www.snowpack.dev/  
+### Typing:               
+TypeScript - https://www.typescriptlang.org/  
+### HTTP-requests:        
+axios - https://github.com/axios/axios  
+### Styling:              
+styled-components - https://styled-components.com/  
+### State management:    
+zustand - https://github.com/pmndrs/zustand  
+### Testing:              
+React testing library - https://testing-library.com/docs/react-testing-library/  
+### Git hooks:            
+husky - https://github.com/typicode/husky  
+### Formatters:          
+prettier - https://prettier.io/  
+        and pretty-quick - https://www.npmjs.com/package/pretty-quick  
+### Deployment:           
+Netlify - https://www.netlify.com/  
 
-### npm run build
-
-Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
-
-**For the best production performance:** Add a build bundler plugin like "@snowpack/plugin-webpack" to your `snowpack.config.js` config file.
-
-### npm test
-
-Launches the application test runner.
-Run with the `--watch` flag (`npm test -- --watch`) to run in interactive watch mode.
+## Automatic Deployment
+Branch: **release**
+Deploys to **netlify**
+* URL: https://thirsty-volhard-1da137.netlify.app
